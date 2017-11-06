@@ -80,6 +80,12 @@
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc6_g.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.jsimone</groupId>
+			<artifactId>webapp-runner</artifactId>
+			<version>7.0.40.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

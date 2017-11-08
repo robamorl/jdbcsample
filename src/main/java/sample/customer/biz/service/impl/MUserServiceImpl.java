@@ -1,4 +1,4 @@
-package sample.customer.biz.service;
+package sample.customer.biz.service.impl;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import sample.customer.biz.domain.MUser;
+import sample.customer.biz.service.MUserService;
+import sample.customer.biz.service.exception.DataNotFoundException;
 import sample.customer.dao.dataaccess.MUserDao;
 
 @Service

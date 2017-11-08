@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import sample.customer.biz.domain.MUser;
+import sample.customer.biz.service.exception.DataNotFoundException;
 
 @Service
 public interface MUserService {

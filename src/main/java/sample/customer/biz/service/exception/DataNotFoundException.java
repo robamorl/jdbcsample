@@ -1,4 +1,4 @@
-package sample.customer.biz.service;
+package sample.customer.biz.service.exception;
 
 
 public class DataNotFoundException extends Exception {

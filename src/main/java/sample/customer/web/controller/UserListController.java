@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import sample.customer.biz.domain.MUser;
-import sample.customer.biz.service.DataNotFoundException;
 import sample.customer.biz.service.MUserService;
+import sample.customer.biz.service.exception.DataNotFoundException;
 
 @Controller
 public class UserListController {

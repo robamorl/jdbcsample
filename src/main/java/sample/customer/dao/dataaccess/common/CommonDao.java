@@ -1,4 +1,4 @@
-package sample.customer.dao.dataaccess.abs;
+package sample.customer.dao.dataaccess.common;
 
 import java.text.MessageFormat;
 import java.util.List;

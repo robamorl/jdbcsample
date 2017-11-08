@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import sample.customer.biz.domain.MUser;
-import sample.customer.biz.service.DataNotFoundException;
 import sample.customer.biz.service.MUserService;
+import sample.customer.biz.service.exception.DataNotFoundException;
 
 @Controller
 @RequestMapping("/user/{userId}")

@@ -1,4 +1,4 @@
-package sample.customer.biz.domain.abs;
+package sample.customer.biz.domain.common;
 
 import java.sql.Date;
 

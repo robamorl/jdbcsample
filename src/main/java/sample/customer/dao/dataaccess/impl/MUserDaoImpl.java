@@ -1,4 +1,4 @@
-package sample.customer.dao.dataaccess;
+package sample.customer.dao.dataaccess.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,8 @@ import org.springframework.stereotype.Repository;
 import sample.customer.biz.domain.MUser;
 import sample.customer.dao.common.SqlColumn;
 import sample.customer.dao.common.SqlCondition;
-import sample.customer.dao.dataaccess.abs.CommonDao;
+import sample.customer.dao.dataaccess.MUserDao;
+import sample.customer.dao.dataaccess.common.CommonDao;
 
 @Repository
 public class MUserDaoImpl extends CommonDao implements MUserDao {

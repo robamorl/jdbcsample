@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
-import sample.customer.biz.domain.abs.CommonDomain;
+import sample.customer.biz.domain.common.CommonDomain;
 
 /**
  *

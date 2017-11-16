@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+  <http>
+    <intercept-url method="GET" pattern="/login" access="permitAll()" />
+    <intercept-url method="POST" pattern="/processLogin" access="permitAll()" />
+    <intercept-url method="POST" pattern="/logout" access="isAuthenticated()" />
+    <intercept-url method="GET" pattern="/top" access="isAuthenticated()" />
+    <intercept-url pattern="/user/**" access="hasRole('ADMIN')" />
+    <intercept-url pattern="/**" access="isAuthenticated()" />
+    <form-login
+      login-page="/login"
+      login-processing-url="/processLogin"
+      default-target-url="/top"
+      authentication-failure-url="/login"
+      username-parameter="paramLoginId"
+      password-parameter="paramPassword"/>
+    <logout logout-url="/logout" logout-success-url="/top"/>
+    <access-denied-handler error-page="/error/accessDenied"/>
+    <csrf />
+  </http>
+
+    <beans:bean id="userService" class="mysys.security.LoginUserJdbcDaoImpl">
+        <beans:property name="dataSource" ref="dataSource"/>
+        <beans:property name="usersByUsernameQuery">
+            <beans:value>
+                select USER_CODE, PASSWORD, DESCRIPTION
+                from M_USER
+                    inner join M_USER_ROLE
+                     on M_USER.USER_ID = M_USER_ROLE.USER_ID
+                          AND M_USER_ROLE.DEFAULT_FLG = 1
+                          AND M_USER_ROLE.DELETE_FLG = 0
+                    inner join M_ROLE
+                     on M_USER_ROLE.ROLE_ID = M_ROLE.ROLE_ID
+                          AND M_ROLE.DELETE_FLG = 0
+                where USER_CODE = ? AND M_USER.DELETE_FLG = 0
+            </beans:value>
+        </beans:property>
+        <beans:property name="authoritiesByUsernameQuery">
+            <beans:value>
+                select USER_CODE, ROLE_NAME
+                from M_ROLE
+                      inner join M_USER_ROLE
+                       on M_ROLE.ROLE_ID = M_USER_ROLE.ROLE_ID
+                          AND M_USER_ROLE.DEFAULT_FLG = 1
+                          AND M_USER_ROLE.DELETE_FLG = 0
+                      inner join M_USER
+                       on M_USER_ROLE.USER_ID = M_USER.USER_ID
+                          AND M_USER.DELETE_FLG = 0
+                where USER_CODE = ? AND M_ROLE.DELETE_FLG = 0
+            </beans:value>
+        </beans:property>
+    </beans:bean>
+
+      <authentication-manager>
+        <authentication-provider user-service-ref="userService">
+        </authentication-provider>
+      </authentication-manager>
+
+<!--
+  <authentication-manager>
+    <authentication-provider>
+      <jdbc-user-service data-source-ref="dataSource"
+          users-by-username-query
+            ="select USER_CODE, PASSWORD, 1
+                from M_USER
+                where USER_CODE = ? AND DELETE_FLG = 0"
+          authorities-by-username-query
+            ="select USER_CODE, ROLE_NAME
+              from M_ROLE
+                inner join M_USER_ROLE on M_ROLE.ROLE_ID = M_USER_ROLE.ROLE_ID AND M_USER_ROLE.DEFAULT_FLG = 1 AND M_USER_ROLE.DELETE_FLG = 0
+                inner join M_USER on M_USER_ROLE.USER_ID = M_USER.USER_ID AND M_USER.DELETE_FLG = 0
+              where USER_CODE = ? AND M_ROLE.DELETE_FLG = 0"  />
+    </authentication-provider>
+  </authentication-manager>
+-->
+</beans:beans>

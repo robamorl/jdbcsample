@@ -1,15 +1,15 @@
-package sample.customer.biz.service.impl;
+package mysys.app.biz.service.impl;
 
 import java.util.List;
+
+import mysys.app.biz.domain.MUser;
+import mysys.app.biz.service.MUserService;
+import mysys.app.biz.service.exception.DataNotFoundException;
+import mysys.app.dao.dataaccess.MUserDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
-import sample.customer.biz.domain.MUser;
-import sample.customer.biz.service.MUserService;
-import sample.customer.biz.service.exception.DataNotFoundException;
-import sample.customer.dao.dataaccess.MUserDao;
 
 @Service
 public class MUserServiceImpl implements MUserService {

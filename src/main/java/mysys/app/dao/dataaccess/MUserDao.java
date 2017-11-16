@@ -1,11 +1,11 @@
-package sample.customer.dao.dataaccess;
+package mysys.app.dao.dataaccess;
 
 import java.util.List;
 
+import mysys.app.biz.domain.MUser;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
-
-import sample.customer.biz.domain.MUser;
 
 public interface MUserDao {
     /**

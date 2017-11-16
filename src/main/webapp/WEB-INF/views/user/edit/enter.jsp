@@ -1,12 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
+<HTML>
+<HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>入力画面</title>
-</head>
-<body>
+</HEAD>
+<BODY>
+    <jsp:include page="../../header/login_info.jsp"/>
 	<h1>入力画面</h1>
 	<form:form modelAttribute="editUser">
 		<dl>
@@ -34,5 +35,5 @@
 		<button type="submit" name="_event_proceed" value="proceed">
 			次へ</button>
 	</form:form>
-</body>
-</html>
+</BODY>
+</HTML>

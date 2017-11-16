@@ -1,9 +1,15 @@
-package sample.customer.dao.dataaccess.impl;
+package mysys.app.dao.dataaccess.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+
+import mysys.app.biz.domain.MUser;
+import mysys.app.dao.common.SqlColumn;
+import mysys.app.dao.common.SqlCondition;
+import mysys.app.dao.dataaccess.MUserDao;
+import mysys.app.dao.dataaccess.common.CommonDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,12 +19,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import sample.customer.biz.domain.MUser;
-import sample.customer.dao.common.SqlColumn;
-import sample.customer.dao.common.SqlCondition;
-import sample.customer.dao.dataaccess.MUserDao;
-import sample.customer.dao.dataaccess.common.CommonDao;
 
 @Repository
 public class MUserDaoImpl extends CommonDao implements MUserDao {
@@ -46,6 +46,8 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
             MAIL_ADDRESS,
             ENTRY_DATE,
             ENTRY_USER,
+            UPDATE_DATE,
+            UPDATE_USER,
             DELETE_FLG
     });
 
@@ -79,6 +81,7 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
      * {@inheritDoc}
      */
     public void insert(MUser user) {
+        user.setEntryData();
         namedParameterJdbcTemplate.update(super.getInsertQuery(TABLE_NAME, COLUMNS),
                 new BeanPropertySqlParameterSource(user));
     }
@@ -87,6 +90,7 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
      * {@inheritDoc}
      */
     public void update(MUser user) throws EmptyResultDataAccessException {
+        user.setUpdateData();
         try {
             namedParameterJdbcTemplate.update(super.getUpdateQuery(TABLE_NAME, COLUMNS, user.getUserId()),
                     new BeanPropertySqlParameterSource(user));
@@ -124,8 +128,10 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
             user.setPassword(rs.getString(PASSWORD.getColumnName()));
             user.setUserName(rs.getString(USER_NAME.getColumnName()));
             user.setMailAddress(rs.getString(MAIL_ADDRESS.getColumnName()));
-            user.setEntryDate(rs.getDate(CommonDao.ENTRY_DATE.getColumnName()));
+            user.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));
             user.setEntryUser(rs.getString(CommonDao.ENTRY_USER.getColumnName()));
+            user.setUpdateDate(rs.getTimestamp(CommonDao.UPDATE_DATE.getColumnName()));
+            user.setUpdateUser(rs.getString(CommonDao.UPDATE_USER.getColumnName()));
             user.setDeleteFlg(rs.getBoolean(CommonDao.DELETE_FLG.getColumnName()));
             return user;
         }

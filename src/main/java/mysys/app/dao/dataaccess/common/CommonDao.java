@@ -1,15 +1,17 @@
-package sample.customer.dao.dataaccess.common;
+package mysys.app.dao.dataaccess.common;
 
 import java.text.MessageFormat;
 import java.util.List;
 
-import sample.customer.dao.common.SqlColumn;
-import sample.customer.dao.common.SqlCondition;
+import mysys.app.dao.common.SqlColumn;
+import mysys.app.dao.common.SqlCondition;
 
 public class CommonDao {
 
     public static final SqlColumn ENTRY_DATE = new SqlColumn("ENTRY_DATE", "entryDate");
     public static final SqlColumn ENTRY_USER = new SqlColumn("ENTRY_USER", "entryUser");
+    public static final SqlColumn UPDATE_DATE = new SqlColumn("UPDATE_DATE", "updateDate");
+    public static final SqlColumn UPDATE_USER = new SqlColumn("UPDATE_USER", "updateUser");
     public static final SqlColumn DELETE_FLG = new SqlColumn("DELETE_FLG", "deleteFlg");
 
     /** SELECT QUERY */

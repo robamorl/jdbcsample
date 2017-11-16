@@ -1,12 +1,12 @@
-package sample.customer.biz.domain;
+package mysys.app.biz.domain;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
+import mysys.app.biz.domain.common.CommonDomain;
 
-import sample.customer.biz.domain.common.CommonDomain;
+import org.hibernate.validator.constraints.Email;
 
 /**
  *
@@ -16,6 +16,7 @@ import sample.customer.biz.domain.common.CommonDomain;
  *
  */
 public class MUser extends CommonDomain {
+
 
     private Long userId;
 
@@ -45,13 +46,6 @@ public class MUser extends CommonDomain {
     }
 
     /**
-     * @return userCode
-     */
-    public final String getUserCode() {
-        return userCode;
-    }
-
-    /**
      * @return password
      */
     public final String getPassword() {
@@ -70,20 +64,6 @@ public class MUser extends CommonDomain {
      */
     public final String getMailAddress() {
         return mailAddress;
-    }
-
-    /**
-     * @param userId セットする userId
-     */
-    public final void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * @param userCode セットする userCode
-     */
-    public final void setUserCode(String userCode) {
-        this.userCode = userCode;
     }
 
     /**
@@ -107,6 +87,25 @@ public class MUser extends CommonDomain {
         this.mailAddress = mailAddress;
     }
 
+    /**
+     * @return userCode
+     */
+    public final String getUserCode() {
+        return userCode;
+    }
 
+    /**
+     * @param userId セットする userId
+     */
+    public final void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * @param userCode セットする userCode
+     */
+    public final void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 
 }

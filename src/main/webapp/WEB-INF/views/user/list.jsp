@@ -1,42 +1,54 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
+<HTML>
+<HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ユーザ一覧画面</title>
-</head>
-<body>
-<h1>ユーザ一覧画面</h1>
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>コード</th>
-    <th>パスワード</th>
-    <th>名前</th>
-    <th>Eメールアドレス</th>
-    <th>登録日時</th>
-    <th>登録者</th>
-    <th></th>
-  </tr>
-  <c:forEach items="${users}" var="user">
-  <tr>
-    <td><c:out value="${user.userId}"/></td>
-    <td><c:out value="${user.userCode}"/></td>
-    <td><c:out value="${user.password}"/></td>
-    <td><c:out value="${user.userName}"/></td>
-    <td><c:out value="${user.mailAddress}"/></td>
-    <td><c:out value="${user.entryDate}"/></td>
-    <td><c:out value="${user.entryUser}"/></td>
-    <td>
-      <c:url value="/user/${user.userId}" var="url"/>
-      <a href="${url}">詳細</a>
-      <c:url value="/user/${user.userId}/edit" var="url"/>
-      <a href="${url}">編集</a>
-    </td>
-  </tr>
-  </c:forEach>
-</table>
-</body>
-</html>
+</HEAD>
+<BODY>
+    <jsp:include page="../header/login_info.jsp"/>
+	<h1>ユーザ一覧画面</h1>
+	<TABLE border="1">
+		<TR>
+			<TH>ID</TH>
+			<TH>コード</TH>
+			<TH>パスワード</TH>
+			<TH>名前</TH>
+			<TH>Eメールアドレス</TH>
+			<TH>登録日時</TH>
+			<TH>登録者</TH>
+			<TH>更新日時</TH>
+			<TH>更新者</TH>
+			<TH></TH>
+		</TR>
+		<c:forEach items="${users}" var="user">
+			<TR>
+				<TD><c:out value="${user.userId}" /></TD>
+				<TD><c:out value="${user.userCode}" /></TD>
+				<TD><c:out value="${user.password}" /></TD>
+				<TD><c:out value="${user.userName}" /></TD>
+				<TD><c:out value="${user.mailAddress}" /></TD>
+				<TD>
+                        <fmt:formatDate value="${user.entryDate}" pattern="yyyy/MM/dd HH:mm:ss" />
+                        <input type="hidden" value="${user.entryDate}" />
+                </TD>
+				<TD><c:out value="${user.entryUser}" /></TD>
+				<TD>
+				        <fmt:formatDate value="${user.updateDate}" pattern="yyyy/MM/dd HH:mm:ss" />
+				        <input type="hidden" value="${user.updateDate}" />
+				</TD>
+				<TD><c:out value="${user.updateUser}" /></TD>
+				<TD>
+				         <c:url value="/user/list/${user.userId}" var="url" />
+				         <button onclick="location.href='${url}'">詳細</button>
+				         <c:url value="/user/list/${user.userId}/edit" var="url" />
+				         <button onclick="location.href='${url}'">編集</button>
+			</TR>
+		</c:forEach>
+	</TABLE>
+	<c:url value="/" var="url" />
+	<button onclick="location.href='${url}'">戻る</button>
+</BODY>
+</HTML>

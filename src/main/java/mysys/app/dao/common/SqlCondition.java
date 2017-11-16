@@ -1,4 +1,4 @@
-package sample.customer.dao.common;
+package mysys.app.dao.common;
 
 public class SqlCondition {
 

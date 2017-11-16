@@ -4,12 +4,16 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>指定された顧客は見つかりません</title>
+<title>例外発生</title>
 </HEAD>
 <BODY>
     <jsp:include page="../header/login_info.jsp"/>
-	<h1>指定された顧客は見つかりません</h1>
-	<c:url value="/customer" var="url" />
-	<a href="${url}">一覧画面へ戻る</a>
+	<dl>
+		<dt>例外クラス</dt>
+		<dd>${exception.getClass().name}</dd>
+		<dt>メッセージ</dt>
+		<dd>${exception.message}</dd>
+	</dl>
+
 </BODY>
 </HTML>

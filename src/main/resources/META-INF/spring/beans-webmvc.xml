@@ -11,7 +11,7 @@
 		http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-  <context:component-scan base-package="sample.customer.web.controller"/>
+  <context:component-scan base-package="mysys.app.web.controller"/>
 
 <!-- Spring MVCアノテーション利用設定 -->
   <mvc:annotation-driven

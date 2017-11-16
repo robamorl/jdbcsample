@@ -1,11 +1,11 @@
-package sample.customer.biz.service;
+package mysys.app.biz.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import mysys.app.biz.domain.MUser;
+import mysys.app.biz.service.exception.DataNotFoundException;
 
-import sample.customer.biz.domain.MUser;
-import sample.customer.biz.service.exception.DataNotFoundException;
+import org.springframework.stereotype.Service;
 
 @Service
 public interface MUserService {

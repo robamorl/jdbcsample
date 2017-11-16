@@ -16,7 +16,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<!-- コンポーネントスキャン -->
-	<context:component-scan base-package="sample.customer.dao" />
+	<context:component-scan base-package="mysys.app.dao" />
 
 	<!-- データソース定義 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"

@@ -1,9 +1,13 @@
-package sample.customer.web.controller;
+package mysys.app.web.controller.user;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mysys.app.biz.domain.MUser;
+import mysys.app.biz.service.MUserService;
+import mysys.app.biz.service.exception.DataNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,22 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import sample.customer.biz.domain.MUser;
-import sample.customer.biz.service.MUserService;
-import sample.customer.biz.service.exception.DataNotFoundException;
-
+@RequestMapping("/user")
 @Controller
 public class UserListController {
 
     @Autowired
     private MUserService mUserService;
 
-    @RequestMapping(value = "/", method = GET)
-    public String home() {
-        return "forward:/user";
-    }
-
-    @RequestMapping(value = "/user", method = GET)
+    @RequestMapping(path = {"/", "/list"}, method = GET)
     public String showAllUsers(Model model) {
         List<MUser> userList = null;
         try {
@@ -38,7 +34,7 @@ public class UserListController {
         return "user/list";
     }
 
-    @RequestMapping(value = "/user/{userId}", method = GET)
+    @RequestMapping(value = "/list/{userId}", method = GET)
     public String showCustomerDetail(@PathVariable Long userId, Model model)
                                         throws DataNotFoundException{
         MUser user = mUserService.execFind(userId);

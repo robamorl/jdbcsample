@@ -1,8 +1,12 @@
-package sample.customer.web.controller;
+package mysys.app.web.controller.user;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import javax.validation.Valid;
+
+import mysys.app.biz.domain.MUser;
+import mysys.app.biz.service.MUserService;
+import mysys.app.biz.service.exception.DataNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -17,12 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import sample.customer.biz.domain.MUser;
-import sample.customer.biz.service.MUserService;
-import sample.customer.biz.service.exception.DataNotFoundException;
-
 @Controller
-@RequestMapping("/user/{userId}")
+@RequestMapping("/user/list/{userId}")
 @SessionAttributes(value = "editUser")
 public class UserEditController {
 

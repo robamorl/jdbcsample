@@ -5,13 +5,14 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import mysys.app.biz.domain.MUser;
+import mysys.app.biz.domain.MUserDto;
 import mysys.app.dao.common.SqlColumn;
 import mysys.app.dao.common.SqlCondition;
 import mysys.app.dao.dataaccess.MUserDao;
 import mysys.app.dao.dataaccess.common.CommonDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -54,7 +55,7 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
     /**
      * {@inheritDoc}
      */
-    public MUser find(Long userId) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
+    public MUserDto find(Long userId) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, userId);
         try {
             return jdbcTemplate
@@ -69,7 +70,7 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
     /**
      * {@inheritDoc}
      */
-    public List<MUser> findAll() {
+    public List<MUserDto> findAll() {
         try {
             return jdbcTemplate.query(super.getSelectQueryByAll(TABLE_NAME), new MUserMapper());
         } catch (EmptyResultDataAccessException e1) {
@@ -80,7 +81,8 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
     /**
      * {@inheritDoc}
      */
-    public void insert(MUser user) {
+    public void insert(MUserDto user) {
+        user.setUserId(this.getPkByNextVal());
         user.setEntryData();
         namedParameterJdbcTemplate.update(super.getInsertQuery(TABLE_NAME, COLUMNS),
                 new BeanPropertySqlParameterSource(user));
@@ -89,7 +91,7 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
     /**
      * {@inheritDoc}
      */
-    public void update(MUser user) throws EmptyResultDataAccessException {
+    public void update(MUserDto user) throws EmptyResultDataAccessException {
         user.setUpdateData();
         try {
             namedParameterJdbcTemplate.update(super.getUpdateQuery(TABLE_NAME, COLUMNS, user.getUserId()),
@@ -105,7 +107,7 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
     public void delete(Long userId) throws EmptyResultDataAccessException {
         try {
             namedParameterJdbcTemplate.update(super.getDeleteQuery(TABLE_NAME, COLUMNS, userId),
-                    new BeanPropertySqlParameterSource(new MUser()));
+                    new BeanPropertySqlParameterSource(new MUserDto()));
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         }
@@ -115,14 +117,21 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
      * {@inheritDoc}
      */
     public void logicalDelete(Long userId) throws EmptyResultDataAccessException {
-        MUser user = this.find(userId);
+        MUserDto user = this.find(userId);
         user.setDeleteFlg(Boolean.TRUE);
         this.update(user);
     }
 
-    class MUserMapper implements RowMapper<MUser> {
-        public MUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-            MUser user = new MUser();
+    /**
+     * {@inheritDoc}
+     */
+    public Long getPkByNextVal()  throws DataAccessException {
+        return jdbcTemplate.queryForObject(super.getSequenceSelectQuery(USER_ID), Long.class);
+    }
+
+    class MUserMapper implements RowMapper<MUserDto> {
+        public MUserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            MUserDto user = new MUserDto();
             user.setUserId(rs.getLong(USER_ID.getColumnName()));
             user.setUserCode(rs.getString(USER_CODE.getColumnName()));
             user.setPassword(rs.getString(PASSWORD.getColumnName()));

@@ -6,6 +6,6 @@
 </sec:authorize>
 <sec:authorize access="isAuthenticated()">
   <sec:authentication var="user" property="principal"/>
-  ログインユーザ：${user.username}<BR>
+  ログインユーザ：${user.userNameJp}<BR>
   権限：${user.description}
 </sec:authorize>

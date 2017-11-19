@@ -31,30 +31,42 @@
         <beans:property name="dataSource" ref="dataSource"/>
         <beans:property name="usersByUsernameQuery">
             <beans:value>
-                select USER_CODE, PASSWORD, DESCRIPTION
-                from M_USER
-                    inner join M_USER_ROLE
-                     on M_USER.USER_ID = M_USER_ROLE.USER_ID
-                          AND M_USER_ROLE.DEFAULT_FLG = 1
-                          AND M_USER_ROLE.DELETE_FLG = 0
-                    inner join M_ROLE
-                     on M_USER_ROLE.ROLE_ID = M_ROLE.ROLE_ID
-                          AND M_ROLE.DELETE_FLG = 0
-                where USER_CODE = ? AND M_USER.DELETE_FLG = 0
+                SELECT
+                    USER_CODE,
+                    PASSWORD,
+                    M_USER.USER_ID,
+                    M_USER.USER_NAME,
+                    DESCRIPTION
+                FROM
+                    M_USER
+                    INNER JOIN M_USER_ROLE
+                     ON M_USER.USER_ID = M_USER_ROLE.USER_ID
+                        AND M_USER_ROLE.DEFAULT_FLG = 1
+                        AND M_USER_ROLE.DELETE_FLG = 0
+                    INNER JOIN M_ROLE
+                     ON M_USER_ROLE.ROLE_ID = M_ROLE.ROLE_ID
+                        AND M_ROLE.DELETE_FLG = 0
+                WHERE
+                    USER_CODE = ? AND M_USER.DELETE_FLG = 0
             </beans:value>
         </beans:property>
         <beans:property name="authoritiesByUsernameQuery">
             <beans:value>
-                select USER_CODE, ROLE_NAME
-                from M_ROLE
-                      inner join M_USER_ROLE
-                       on M_ROLE.ROLE_ID = M_USER_ROLE.ROLE_ID
-                          AND M_USER_ROLE.DEFAULT_FLG = 1
-                          AND M_USER_ROLE.DELETE_FLG = 0
-                      inner join M_USER
-                       on M_USER_ROLE.USER_ID = M_USER.USER_ID
-                          AND M_USER.DELETE_FLG = 0
-                where USER_CODE = ? AND M_ROLE.DELETE_FLG = 0
+                SELECT
+                    USER_CODE,
+                    ROLE_NAME
+                FROM
+                    M_ROLE
+                    INNER JOIN M_USER_ROLE
+                     ON M_ROLE.ROLE_ID = M_USER_ROLE.ROLE_ID
+                        AND M_USER_ROLE.DEFAULT_FLG = 1
+                        AND M_USER_ROLE.DELETE_FLG = 0
+                    INNER JOIN M_USER
+                     ON M_USER_ROLE.USER_ID = M_USER.USER_ID
+                        AND M_USER.DELETE_FLG = 0
+                WHERE
+                    USER_CODE = ? AND
+                    M_ROLE.DELETE_FLG = 0
             </beans:value>
         </beans:property>
     </beans:bean>

@@ -20,11 +20,13 @@ public class LoginUserJdbcDaoImpl extends JdbcDaoImpl {
                                         throws SQLException {
                                 String userCode = rs.getString("USER_CODE");
                                 String password = rs.getString("PASSWORD");
+                                Long userId = rs.getLong("USER_ID");
+                                String userNameJp = rs.getString("USER_NAME");
                                 String description = rs.getString("DESCRIPTION");
-
                                 LoginUser user = new LoginUser(userCode, password,
                                                 AuthorityUtils.NO_AUTHORITIES);
-
+                                user.setUserId(userId);
+                                user.setUserNameJp(userNameJp);
                                 user.setDescription(description);
 
                                 return user;
@@ -39,8 +41,12 @@ public class LoginUserJdbcDaoImpl extends JdbcDaoImpl {
         LoginUser origin = (LoginUser) userFromUserQuery;
         String userCode = origin.getUsername();
         String password = origin.getPassword();
+        Long userId = origin.getUserId();
+        String userNameJp = origin.getUserNameJp();
         String description = origin.getDescription();
         LoginUser user = new LoginUser(userCode, password, combinedAuthorities);
+        user.setUserId(userId);
+        user.setUserNameJp(userNameJp);
         user.setDescription(description);
         return user;
     }

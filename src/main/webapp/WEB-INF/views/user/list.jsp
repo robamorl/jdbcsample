@@ -8,11 +8,10 @@
 <title>ユーザ一覧画面</title>
 </HEAD>
 <BODY>
-    <jsp:include page="../header/login_info.jsp"/>
+	<jsp:include page="../header/login_info.jsp" />
 	<h1>ユーザ一覧画面</h1>
 	<TABLE border="1">
 		<TR>
-			<TH>ID</TH>
 			<TH>コード</TH>
 			<TH>パスワード</TH>
 			<TH>名前</TH>
@@ -25,29 +24,28 @@
 		</TR>
 		<c:forEach items="${users}" var="user">
 			<TR>
-				<TD><c:out value="${user.userId}" /></TD>
 				<TD><c:out value="${user.userCode}" /></TD>
 				<TD><c:out value="${user.password}" /></TD>
 				<TD><c:out value="${user.userName}" /></TD>
 				<TD><c:out value="${user.mailAddress}" /></TD>
-				<TD>
-                        <fmt:formatDate value="${user.entryDate}" pattern="yyyy/MM/dd HH:mm:ss" />
-                        <input type="hidden" value="${user.entryDate}" />
-                </TD>
+				<TD><fmt:formatDate value="${user.entryDate}"
+						pattern="yyyy/MM/dd HH:mm:ss" /> <input type="hidden"
+					value="${user.entryDate}" /></TD>
 				<TD><c:out value="${user.entryUser}" /></TD>
-				<TD>
-				        <fmt:formatDate value="${user.updateDate}" pattern="yyyy/MM/dd HH:mm:ss" />
-				        <input type="hidden" value="${user.updateDate}" />
-				</TD>
+				<TD><fmt:formatDate value="${user.updateDate}"
+						pattern="yyyy/MM/dd HH:mm:ss" /> <input type="hidden"
+					value="${user.updateDate}" /></TD>
 				<TD><c:out value="${user.updateUser}" /></TD>
-				<TD>
-				         <c:url value="/user/list/${user.userId}" var="url" />
-				         <button onclick="location.href='${url}'">詳細</button>
-				         <c:url value="/user/list/${user.userId}/edit" var="url" />
-				         <button onclick="location.href='${url}'">編集</button>
+				<TD><c:url value="/user/list/${user.userId}" var="url" />
+					<button onclick="location.href='${url}'">詳細</button> <c:url
+						value="/user/list/${user.userId}/edit" var="url" />
+					<button onclick="location.href='${url}'">編集</button>
 			</TR>
 		</c:forEach>
 	</TABLE>
+	<c:url value="/user/list/create" var="url" />
+	<button onclick="location.href='${url}'">登録</button>
+	&nbsp;&nbsp;
 	<c:url value="/" var="url" />
 	<button onclick="location.href='${url}'">戻る</button>
 </BODY>

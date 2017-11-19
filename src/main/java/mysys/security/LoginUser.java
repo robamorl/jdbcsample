@@ -7,11 +7,46 @@ import org.springframework.security.core.userdetails.User;
 
 public class LoginUser extends User {
 
+    /** ユーザID  */
+    private Long userId;
+
+    /** ユーザ名 */
+    private String userNameJp;
+
+    /** ロール名 */
     private String description;
 
     public LoginUser(String userCode, String password,
             Collection<? extends GrantedAuthority> authorities) {
         super(userCode, password, authorities);
+    }
+
+    /**
+     * @return userId
+     */
+    public final Long getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId セットする userId
+     */
+    public final void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * @return userNameJp
+     */
+    public final String getUserNameJp() {
+        return userNameJp;
+    }
+
+    /**
+     * @param userNameJp セットする userNameJp
+     */
+    public final void setUserNameJp(String userNameJp) {
+        this.userNameJp = userNameJp;
     }
 
     /**

@@ -8,7 +8,7 @@
 <title>入力画面</title>
 </HEAD>
 <BODY>
-	<jsp:include page="../../header/login_info.jsp" />
+    <jsp:include page="../../header/login_info.jsp"/>
 	<h1>入力画面</h1>
 	<form:form modelAttribute="editUser">
 		<dl>
@@ -36,7 +36,7 @@
 		<button type="submit" name="_event_proceed" value="proceed">
 			次へ</button>
 			&nbsp;&nbsp;
-	     <button type="submit" name="_event_back" value="back">戻る</button>
+		  <button type="submit" name="_event_back" value="back">戻る</button>
 	</form:form>
 </BODY>
 </HTML>

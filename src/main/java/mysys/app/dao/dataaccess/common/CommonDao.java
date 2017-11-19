@@ -17,6 +17,9 @@ public class CommonDao {
     /** SELECT QUERY */
     private static final String SELECT_QUERY = "SELECT * FROM {0} ";
 
+    /** SELECT SEQUENCE QUERY */
+    private static final String SELECT_SEQUENCE_QUERY = "SELECT {0} FROM DUAL ";
+
     /** UPDATE QUERY */
     private static final String UPDATE_QUERY = "UPDATE {0} SET {1} WHERE {2}";
 
@@ -59,8 +62,13 @@ public class CommonDao {
      * @return クエリー
      */
     protected String getSelectQueryByCondition(String tableName, SqlCondition... conditions) {
-        String query = MessageFormat.format(SELECT_QUERY, (Object)tableName);
-        return query + " WHERE " + this.getCondition(conditions);
+        StringBuffer query = new StringBuffer();
+        query.append(MessageFormat.format(SELECT_QUERY, (Object)tableName));
+        if (conditions != null) {
+            query.append(" WHERE ");
+            query.append(this.getCondition(conditions));
+        }
+        return query.toString();
     }
 
     /**
@@ -149,11 +157,7 @@ public class CommonDao {
                 result.append(column.getColumnName());
                 break;
             case TYPE_INSERT_VALUES:
-                if (count == 1) {
-                    result.append(this.getSequenceNextValQuery(column));
-                } else {
                     result.append(":" + column.getJavaPropertyName());
-                }
                 break;
             case TYPE_UPDATE:
                 result.append(column.getColumnName());
@@ -181,6 +185,19 @@ public class CommonDao {
      */
     protected SqlCondition getPkConditionByEqual(SqlColumn pkColumn,  Object pk) {
         return new SqlCondition(pkColumn.getColumnName(), SqlCondition.EQ, pk.toString());
+    }
+
+    /**
+     *
+     * シーケンス値取得用のSELECT文を作成します。
+     *
+     * @param pk pkカラム
+     * @return シーケンス値取得用のSELECT文
+     */
+    protected String getSequenceSelectQuery(SqlColumn pk) {
+        return MessageFormat.format(SELECT_SEQUENCE_QUERY,
+                (Object[]) new String[] {
+                this.getSequenceNextValQuery(pk)});
     }
 
     /**

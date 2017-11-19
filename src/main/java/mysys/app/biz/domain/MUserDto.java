@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Email;
  * @author Ryuji
  *
  */
-public class MUser extends CommonDomain {
+public class MUserDto extends CommonDomain {
 
 
     private Long userId;

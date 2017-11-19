@@ -5,7 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import mysys.app.biz.domain.MUser;
+import mysys.app.biz.domain.MUserDto;
 import mysys.app.biz.service.MUserService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 
@@ -24,11 +24,11 @@ public class UserListController {
 
     @RequestMapping(path = {"/", "/list"}, method = GET)
     public String showAllUsers(Model model) {
-        List<MUser> userList = null;
+        List<MUserDto> userList = null;
         try {
             userList = mUserService.execFindAll();
         } catch (DataNotFoundException e) {
-            userList = new ArrayList<MUser>();
+            userList = new ArrayList<MUserDto>();
         }
         model.addAttribute("users", userList);
         return "user/list";
@@ -37,7 +37,7 @@ public class UserListController {
     @RequestMapping(value = "/list/{userId}", method = GET)
     public String showCustomerDetail(@PathVariable Long userId, Model model)
                                         throws DataNotFoundException{
-        MUser user = mUserService.execFind(userId);
+        MUserDto user = mUserService.execFind(userId);
         model.addAttribute("user", user);
         return "user/detail";
     }

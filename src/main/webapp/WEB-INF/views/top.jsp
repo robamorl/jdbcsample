@@ -12,10 +12,10 @@
 <h1>トップページ</h1>
 トップページです。
 <ul>
-  <li><a href="user/">ユーザ一覧</a></li>
   <sec:authorize access="hasRole('ADMIN')">
-    <li><a href="admin/admin.jsp">管理者専用ページへ</a></li>
+      <li><a href="user/">ユーザ管理</a></li>
   </sec:authorize>
+  <li><a href="account/">口座管理</a></li>
 </ul>
 <form action="logout" method="post">
   <sec:csrfInput />

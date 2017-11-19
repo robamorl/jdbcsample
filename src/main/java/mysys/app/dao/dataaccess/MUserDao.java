@@ -2,7 +2,7 @@ package mysys.app.dao.dataaccess;
 
 import java.util.List;
 
-import mysys.app.biz.domain.MUser;
+import mysys.app.biz.domain.MUserDto;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -14,9 +14,10 @@ public interface MUserDao {
      *
      * @param userId PK
      * @return MUser
-     * @throws DataAccessException,IncorrectResultSizeDataAccessException
+     * @throws DataAccessException
+     * @throws IncorrectResultSizeDataAccessException
      */
-    public MUser find(Long userId) throws DataAccessException,IncorrectResultSizeDataAccessException;
+    public MUserDto find(Long userId) throws DataAccessException,IncorrectResultSizeDataAccessException;
 
     /**
      *
@@ -24,7 +25,7 @@ public interface MUserDao {
      *
      * @return List<MUser>
      */
-    public List<MUser> findAll();
+    public List<MUserDto> findAll();
 
     /**
      *
@@ -32,7 +33,7 @@ public interface MUserDao {
      *
      * @param user MUser
      */
-    public void insert(MUser user);
+    public void insert(MUserDto user);
 
     /**
      *
@@ -41,7 +42,7 @@ public interface MUserDao {
      * @param user MUser
      * @throws DataAccessException
      */
-    public void update(MUser user) throws DataAccessException;
+    public void update(MUserDto user) throws DataAccessException;
 
     /**
      *
@@ -60,4 +61,14 @@ public interface MUserDao {
      * @throws DataAccessException
      */
     public void logicalDelete(Long userId) throws DataAccessException;
+
+
+    /**
+     *
+     * 主キー採番メソッド
+     *
+     * @return 採番した主キー
+     * @throws DataAccessException
+     */
+    public Long getPkByNextVal() throws DataAccessException;
 }

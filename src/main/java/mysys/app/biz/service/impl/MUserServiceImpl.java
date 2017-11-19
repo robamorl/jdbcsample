@@ -2,7 +2,7 @@ package mysys.app.biz.service.impl;
 
 import java.util.List;
 
-import mysys.app.biz.domain.MUser;
+import mysys.app.biz.domain.MUserDto;
 import mysys.app.biz.service.MUserService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 import mysys.app.dao.dataaccess.MUserDao;
@@ -17,11 +17,17 @@ public class MUserServiceImpl implements MUserService {
     @Autowired
     MUserDao userDao;
 
-    public MUser execFind(Long userId) {
+    /**
+     * {@inheritDoc}
+     */
+    public MUserDto execFind(Long userId) {
         return userDao.find(userId);
     }
 
-    public List<MUser> execFindAll() throws DataNotFoundException {
+    /**
+     * {@inheritDoc}
+     */
+    public List<MUserDto> execFindAll() throws DataNotFoundException {
         try {
             return userDao.findAll();
         } catch (EmptyResultDataAccessException e) {
@@ -29,12 +35,18 @@ public class MUserServiceImpl implements MUserService {
         }
     }
 
-    public MUser execInsert(MUser user) {
+    /**
+     * {@inheritDoc}
+     */
+    public MUserDto execInsert(MUserDto user) {
         userDao.insert(user);
         return userDao.find(user.getUserId());
     }
 
-    public MUser execUpdate(MUser user) throws DataNotFoundException {
+    /**
+     * {@inheritDoc}
+     */
+    public MUserDto execUpdate(MUserDto user) throws DataNotFoundException {
         try {
             userDao.update(user);
             return userDao.find(user.getUserId());
@@ -43,7 +55,10 @@ public class MUserServiceImpl implements MUserService {
         }
     }
 
-    public MUser execDelete(Long userId) throws DataNotFoundException {
+    /**
+     * {@inheritDoc}
+     */
+    public MUserDto execDelete(Long userId) throws DataNotFoundException {
         try {
             userDao.delete(userId);
             return userDao.find(userId);
@@ -52,7 +67,10 @@ public class MUserServiceImpl implements MUserService {
         }
     }
 
-    public MUser execLogicalDelete(Long userId) throws DataNotFoundException {
+    /**
+     * {@inheritDoc}
+     */
+    public MUserDto execLogicalDelete(Long userId) throws DataNotFoundException {
         try {
             userDao.logicalDelete(userId);
             return userDao.find(userId);

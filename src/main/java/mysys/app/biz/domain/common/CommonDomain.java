@@ -22,6 +22,7 @@ public class CommonDomain {
         this.entryUser = SecurityContextHolder.getContext().getAuthentication().getName();
         this.updateDate = now;
         this.updateUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        this.deleteFlg = Boolean.FALSE;
     }
 
     /**

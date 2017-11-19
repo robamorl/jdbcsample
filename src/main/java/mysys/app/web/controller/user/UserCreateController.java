@@ -7,7 +7,9 @@ import javax.validation.Valid;
 import mysys.app.biz.domain.MUserDto;
 import mysys.app.biz.service.MUserService;
 import mysys.app.biz.service.exception.DataNotFoundException;
+import mysys.app.web.form.UserForm;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -16,15 +18,14 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
-@RequestMapping("/user/list/{userId}")
+@RequestMapping("/user/list")
 @SessionAttributes(value = "editUser")
-public class UserEditController {
+public class UserCreateController {
 
     @Autowired
     MUserService mUserService;
@@ -38,14 +39,12 @@ public class UserEditController {
      *
      * edit
      *
-     * @param userId
      * @param model
      * @return
-     * @throws DataNotFoundException
      */
-    @RequestMapping(path = "/edit", method = GET)
-    public  String redirectToEntryForm(@PathVariable Long userId, Model model) throws DataNotFoundException {
-        model.addAttribute("editUser", mUserService.execFind(userId));
+    @RequestMapping(path = "/create", method = GET)
+    public  String redirectToEntryForm(Model model) {
+        model.addAttribute("editUser", new UserForm());
         return "redirect:enter";
     }
 
@@ -57,21 +56,21 @@ public class UserEditController {
      */
     @RequestMapping(path = "/enter", method = GET)
     public String showEntryForm() {
-        return "user/edit/enter";
+        return "user/create/enter";
     }
 
     /**
      *
      * validate
      *
-     * @param user
+     * @param userFrom
      * @param errors
      * @return
      */
     @RequestMapping(path = "/enter", params="_event_proceed", method=POST)
-    public String verify(@Valid @ModelAttribute("editUser") MUserDto user, Errors errors) {
+    public String verify(@Valid @ModelAttribute("editUser") UserForm userFrom, Errors errors) {
         if (errors.hasErrors()) {
-            return "user/edit/enter";
+            return "user/create/enter";
         }
         return "redirect:review";
     }
@@ -95,7 +94,7 @@ public class UserEditController {
      */
     @RequestMapping(path = "/review", method=GET)
     public String showReview() {
-        return "user/edit/review";
+        return "user/create/review";
     }
 
     /**
@@ -113,14 +112,16 @@ public class UserEditController {
      *
      * 登録実行
      *
-     * @param user
+     * @param userFrom
      * @return
      * @throws DataNotFoundException
      */
     @RequestMapping(path = "/review", params = "_event_confirmed", method=POST)
-    public String execRegister(@ModelAttribute("editUser") MUserDto user) throws DataNotFoundException {
-        mUserService.execUpdate(user);
-        return "redirect:edited";
+    public String execRegister(@ModelAttribute("editUser") UserForm userFrom) throws DataNotFoundException {
+        MUserDto user = new MUserDto();
+        BeanUtils.copyProperties(userFrom, user);
+        mUserService.execInsert(user);
+        return "redirect:created";
     }
 
     /**
@@ -130,9 +131,9 @@ public class UserEditController {
      * @param sessionStatus
      * @return
      */
-    @RequestMapping(path = "/edited", method = GET)
+    @RequestMapping(path = "/created", method = GET)
     public String showEdited(SessionStatus sessionStatus) {
         sessionStatus.setComplete();
-        return "user/edit/edited";
+        return "user/create/edited";
     }
 }

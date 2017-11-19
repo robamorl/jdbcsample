@@ -5,38 +5,30 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ユーザ詳細画面</title>
+<title>登録完了</title>
 </HEAD>
 <BODY>
-    <jsp:include page="../header/login_info.jsp"/>
-	<h1>ユーザ詳細画面</h1>
+    <jsp:include page="../../header/login_info.jsp"/>
+	<h1>登録完了</h1>
 	<dl>
 		<dt>ユーザコード</dt>
 		<dd>
-			<c:out value="${user.userCode}" />
+			<c:out value="${editUser.userCode}" />
 		</dd>
 		<dt>パスワード</dt>
 		<dd>
-			<c:out value="${user.password}" />
+			<c:out value="${editUser.password}" />
 		</dd>
 		<dt>名前</dt>
 		<dd>
-			<c:out value="${user.userName}" />
+			<c:out value="${editUser.userName}" />
 		</dd>
 		<dt>Eメールアドレス</dt>
 		<dd>
-			<c:out value="${user.mailAddress}" />
-		</dd>
-		<dt>登録日時</dt>
-		<dd>
-			<fmt:formatDate pattern="yyyy/MM/dd" value="${user.entryDate}" />
-		</dd>
-		<dt>登録者</dt>
-		<dd>
-			<c:out value="${user.entryUser}" />
+			<c:out value="${editUser.mailAddress}" />
 		</dd>
 	</dl>
-	<c:url value="/user/list" var="url" />
-	<button onclick="location.href='${url}'">一覧</button>
+	<c:url var="url" value="/user/list" />
+	<button onclick="location.href='${url}'">戻る</button>
 </BODY>
 </HTML>

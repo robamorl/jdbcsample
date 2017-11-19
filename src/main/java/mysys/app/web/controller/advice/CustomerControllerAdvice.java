@@ -5,6 +5,7 @@ import mysys.app.biz.service.exception.DataNotFoundException;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,9 +27,9 @@ public class CustomerControllerAdvice {
     }
 
     @ExceptionHandler(Exception.class)
-    public String handleException(Exception e) {
+    public String handleException(Exception e, Model model) {
         e.printStackTrace();
-
+        model.addAttribute("exception", e);
         return "error/error";
     }
 }

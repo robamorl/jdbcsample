@@ -2,11 +2,16 @@ package mysys.app.web.form;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import mysys.app.biz.common.kubun.AccountKubun;
 import mysys.app.biz.common.util.KubunUtil;
 import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.MAccountDto;
 import mysys.app.biz.service.exception.SystemException;
+import mysys.security.util.LoginUserUtil;
 
 import org.springframework.beans.BeanUtils;
 
@@ -22,7 +27,10 @@ public class AccountForm {
     /** 口座ID */
     private Long accountId;
     /** 口座番号 */
-    private Long accountNumber;
+    @NotNull
+    @Size(min=16, max=16)
+    @Pattern(regexp="[0-9]*")
+    private String accountNumber;
     /** 口座番号表示用 */
     private String accountNumberForDisplay;
     /** ユーザID */
@@ -56,6 +64,20 @@ public class AccountForm {
         // 区分名は取得
         String accountKubunMei = KubunUtil.getKubunMei(AccountKubun.ACCOUNT_KUBUN_LIST, this.getAccountKubun());
         this.setAccountKubunMei(accountKubunMei);
+    }
+
+    /**
+     *
+     * Formの内容からDTOを作成する
+     *
+     * @return Formの内容をコピーしたDTO
+     */
+    public MAccountDto createDto() {
+        MAccountDto dto = new  MAccountDto();
+        BeanUtils.copyProperties(this, dto);
+        // ユーザIDをセット
+        dto.setUserId(LoginUserUtil.getLoginUserId());
+        return dto;
     }
 
     /**
@@ -155,7 +177,7 @@ public class AccountForm {
     /**
      * @return accountNumber
      */
-    public final Long getAccountNumber() {
+    public final String getAccountNumber() {
         return accountNumber;
     }
     /**
@@ -173,7 +195,7 @@ public class AccountForm {
     /**
      * @param accountNumber セットする accountNumber
      */
-    public final void setAccountNumber(Long accountNumber) {
+    public final void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
     /**

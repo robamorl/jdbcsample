@@ -65,7 +65,7 @@ public class CommonDao {
         StringBuffer query = new StringBuffer();
         query.append(MessageFormat.format(SELECT_QUERY, (Object)tableName));
         if (conditions != null) {
-            query.append(" WHERE ");
+            query.append("WHERE ");
             query.append(this.getCondition(conditions));
         }
         return query.toString();

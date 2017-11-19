@@ -51,7 +51,7 @@ public class MAccountServiceImpl implements MAccountService {
      */
     public MAccountDto execInsert(MAccountDto account) {
         accountDao.insert(account);
-        return accountDao.find(account.getUserId());
+        return accountDao.find(account.getAccountId());
     }
 
     /**

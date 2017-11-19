@@ -64,16 +64,16 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<tx:advice id="daoTransactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="find*" propagation="REQUIRED" isolation="SERIALIZABLE"
-				read-only="false" rollback-for="java.lang.Exception" timeout="10" />
+				read-only="false" rollback-for="java.lang.Exception" timeout="180" />
 			<tx:method name="insert*" propagation="MANDATORY"
 				isolation="SERIALIZABLE" read-only="false" rollback-for="java.lang.Exception"
-				timeout="10" />
+				timeout="180" />
 			<tx:method name="update*" propagation="MANDATORY"
 				isolation="READ_UNCOMMITTED" read-only="false" rollback-for="java.lang.Exception"
-				timeout="10" />
+				timeout="180" />
 			<tx:method name="*delete*" propagation="MANDATORY"
 				isolation="READ_UNCOMMITTED" read-only="false" rollback-for="java.lang.Exception"
-				timeout="10" />
+				timeout="180" />
 		</tx:attributes>
 	</tx:advice>
 

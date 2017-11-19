@@ -22,7 +22,7 @@ public class MAccountDto extends CommonDomain implements Serializable{
     private Long accountId;
 
     /** ACCOUNT_NUMBER*/
-    private Long accountNumber;
+    private String accountNumber;
 
     /** USER_ID*/
     private Long userId;
@@ -40,7 +40,7 @@ public class MAccountDto extends CommonDomain implements Serializable{
     /**
      * @return accountNumber
      */
-    public final Long getAccountNumber() {
+    public final String getAccountNumber() {
         return accountNumber;
     }
 
@@ -68,7 +68,7 @@ public class MAccountDto extends CommonDomain implements Serializable{
     /**
      * @param accountNumber セットする accountNumber
      */
-    public final void setAccountNumber(Long accountNumber) {
+    public final void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

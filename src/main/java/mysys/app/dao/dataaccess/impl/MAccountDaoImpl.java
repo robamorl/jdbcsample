@@ -145,7 +145,7 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
         public MAccountDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             MAccountDto account = new MAccountDto();
             account.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
-            account.setAccountNumber(rs.getLong(ACCOUNT_NUMBER.getColumnName()));
+            account.setAccountNumber(rs.getString(ACCOUNT_NUMBER.getColumnName()));
             account.setUserId(rs.getLong(USER_ID.getColumnName()));
             account.setAccountKubun(rs.getString(ACCOUNT_KUBUN.getColumnName()));
             account.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));

@@ -18,15 +18,15 @@ public class KubunUtil {
      * 区分リストの中から引数のkubunIdに該当する区分名を取得する
      *
      * @param kubunList 区分リスト
-     * @param kubunId 区分値
+     * @param value 区分値
      * @return 区分名
      */
-    public static String getKubunMei(List<Kubun> kubunList, String kubunId) {
+    public static String getKubunMei(List<Kubun> kubunList, String value) {
         // 引数のリストをループで回して検索
         for (Kubun kubun : kubunList) {
-            if (kubun.getId().equals(kubunId)) {
+            if (kubun.getValue().equals(value)) {
                 // 見つかった時点で区分名返却
-                return kubun.getValue();
+                return kubun.getLabel();
             }
         }
         // 見つからなかったらnull

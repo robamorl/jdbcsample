@@ -10,44 +10,48 @@ package mysys.app.biz.common.kubun.stationery;
 public class Kubun {
 
     /** 区分値 */
-    private String id;
-    /** 区分表示名 */
     private String value;
+    /** 区分表示名 */
+    private String label;
 
     /**
      *
      * コンストラクタ
      *
-     * @param id 区分値
-     * @param value  区分表示名
+     * @param value 区分値
+     * @param label  区分表示名
      */
-    public Kubun(String id, String value) {
-        this.id = id;
+    public Kubun(String value, String label) {
         this.value = value;
+        this.label = label;
     }
 
-    /**
-     * @return id
-     */
-    public final String getId() {
-        return id;
-    }
     /**
      * @return value
      */
     public final String getValue() {
         return value;
     }
+
     /**
-     * @param id セットする id
+     * @return label
      */
-    public final void setId(String id) {
-        this.id = id;
+    public final String getLabel() {
+        return label;
     }
+
     /**
      * @param value セットする value
      */
     public final void setValue(String value) {
         this.value = value;
     }
+
+    /**
+     * @param label セットする label
+     */
+    public final void setLabel(String label) {
+        this.label = label;
+    }
+
 }

@@ -21,7 +21,8 @@
 		</dd>
 		<dt>登録日時</dt>
 		<dd>
-			<fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss" value="${account.entryDate}" />
+			<fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss"
+				value="${account.entryDate}" />
 		</dd>
 		<dt>登録者</dt>
 		<dd>
@@ -29,7 +30,8 @@
 		</dd>
 		<dt>更新日時</dt>
 		<dd>
-			<fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss" value="${account.entryDate}" />
+			<fmt:formatDate pattern="yyyy/MM/dd HH:mm:ss"
+				value="${account.entryDate}" />
 		</dd>
 		<dt>更新者</dt>
 		<dd>
@@ -38,5 +40,8 @@
 	</dl>
 	<c:url value="/account/list" var="url" />
 	<button onclick="location.href='${url}'">一覧</button>
+	<c:url value="/account/list/${account.accountId}/delete" var="url" />
+	<button onclick="if (confirm('口座番号「${account.accountNumberForDisplay}」を削除します。よろしいですか？')) {location.href='${url}'}">削除</button>
+
 </BODY>
 </HTML>

@@ -8,7 +8,7 @@
 <title>ユーザ詳細画面</title>
 </HEAD>
 <BODY>
-    <jsp:include page="../header/login_info.jsp"/>
+	<jsp:include page="../header/login_info.jsp" />
 	<h1>ユーザ詳細画面</h1>
 	<dl>
 		<dt>ユーザコード</dt>
@@ -38,5 +38,7 @@
 	</dl>
 	<c:url value="/user/list" var="url" />
 	<button onclick="location.href='${url}'">一覧</button>
+	<c:url value="/user/list/${user.userId}/delete" var="url" />
+	<button onclick="if (confirm('${user.userName}を削除します。よろしいですか？')) {location.href='${url}'}">削除</button>
 </BODY>
 </HTML>

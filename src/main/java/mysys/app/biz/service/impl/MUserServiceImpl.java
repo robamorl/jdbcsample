@@ -60,8 +60,9 @@ public class MUserServiceImpl implements MUserService {
      */
     public MUserDto execDelete(Long userId) throws DataNotFoundException {
         try {
-            userDao.delete(userId);
-            return userDao.find(userId);
+            MUserDto dto = userDao.find(userId);
+            userDao.delete(dto.getUserId());
+            return dto;
         } catch (EmptyResultDataAccessException e) {
             throw new DataNotFoundException("ユーザが見つかりませんでした。");
         }
@@ -73,7 +74,7 @@ public class MUserServiceImpl implements MUserService {
     public MUserDto execLogicalDelete(Long userId) throws DataNotFoundException {
         try {
             userDao.logicalDelete(userId);
-            return userDao.find(userId);
+            return userDao.findWithContainsDeleteRec(userId);
         } catch (EmptyResultDataAccessException e) {
             throw new DataNotFoundException("ユーザが見つかりませんでした。");
         }

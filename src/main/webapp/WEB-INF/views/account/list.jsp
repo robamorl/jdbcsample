@@ -10,6 +10,7 @@
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
 	<h1>口座一覧画面</h1>
+	<b style="color:#FF0000;"><c:out value="${message}" /></b>
 	<TABLE border="1">
 		<TR>
 			<TH>口座番号</TH>

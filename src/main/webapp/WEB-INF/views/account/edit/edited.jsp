@@ -9,27 +9,22 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
-	<h1>更新完了</h1>
-	<b style="color:#FF0000;"><c:out value="${message}" /></b>
+	<h1>登録完了</h1>
+	<b style="color: #FF0000;"><c:out value="${message}" /></b>
+	<input type="hidden" name="${editAccount.accountId}" />
+	<input type="hidden" name="${editAccount.userId}" />
 	<dl>
-		<dt>ユーザコード</dt>
+		<dt>口座番号</dt>
 		<dd>
-			<c:out value="${editUser.userCode}" />
+			<c:out value="${editAccount.accountNumber}" />
 		</dd>
-		<dt>パスワード</dt>
+		<dt>口座区分</dt>
 		<dd>
-			<c:out value="${editUser.password}" />
-		</dd>
-		<dt>名前</dt>
-		<dd>
-			<c:out value="${editUser.userName}" />
-		</dd>
-		<dt>Eメールアドレス</dt>
-		<dd>
-			<c:out value="${editUser.mailAddress}" />
+			<c:out value="${editAccount.accountKubunMei}" />
+			<input type="hidden" value="${editAccount.accountKubun}">
 		</dd>
 	</dl>
-	<c:url var="url" value="/user/list" />
+	<c:url var="url" value="/account/list" />
 	<button onclick="location.href='${url}'">戻る</button>
 </BODY>
 </HTML>

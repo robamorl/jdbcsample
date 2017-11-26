@@ -4,9 +4,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import javax.validation.Valid;
 
-import mysys.app.biz.domain.MUserDto;
+import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.service.MUserService;
 import mysys.app.biz.service.exception.DataNotFoundException;
+import mysys.app.web.form.UserForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -45,7 +46,9 @@ public class UserEditController {
      */
     @RequestMapping(path = "/edit", method = GET)
     public  String redirectToEntryForm(@PathVariable Long userId, Model model) throws DataNotFoundException {
-        model.addAttribute("editUser", mUserService.execFind(userId));
+        UserForm form = new UserForm();
+        form.copyFrom(mUserService.execFind(userId));
+        model.addAttribute("editUser", form);
         return "redirect:enter";
     }
 
@@ -64,12 +67,12 @@ public class UserEditController {
      *
      * validate
      *
-     * @param user
+     * @param form
      * @param errors
      * @return
      */
     @RequestMapping(path = "/enter", params="_event_proceed", method=POST)
-    public String verify(@Valid @ModelAttribute("editUser") MUserDto user, Errors errors) {
+    public String verify(@Valid @ModelAttribute("editUser") UserForm form, Errors errors) {
         if (errors.hasErrors()) {
             return "user/edit/enter";
         }
@@ -113,13 +116,13 @@ public class UserEditController {
      *
      * 登録実行
      *
-     * @param user
+     * @param form
      * @return
      * @throws DataNotFoundException
      */
     @RequestMapping(path = "/review", params = "_event_confirmed", method=POST)
-    public String execRegister(@ModelAttribute("editUser") MUserDto user) throws DataNotFoundException {
-        mUserService.execUpdate(user);
+    public String execRegister(@ModelAttribute("editUser") UserForm form) throws DataNotFoundException {
+        mUserService.execUpdate(form.createDto());
         return "redirect:edited";
     }
 
@@ -128,11 +131,13 @@ public class UserEditController {
      * edited
      *
      * @param sessionStatus
+     * @param model
      * @return
      */
     @RequestMapping(path = "/edited", method = GET)
-    public String showEdited(SessionStatus sessionStatus) {
+    public String showEdited(SessionStatus sessionStatus, Model model) {
         sessionStatus.setComplete();
+        ProjectCommonUtil.addUpdateDoneMessage(model);
         return "user/edit/edited";
     }
 }

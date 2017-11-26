@@ -1,6 +1,10 @@
 package mysys.app.biz.common.util;
 
+import javax.jws.WebParam.Mode;
+
 import mysys.app.biz.service.exception.SystemException;
+
+import org.springframework.ui.Model;
 
 /**
  *
@@ -44,5 +48,49 @@ public class ProjectCommonUtil {
             return null;
         }
         return obj.toString();
+    }
+
+    /**
+     *
+     * 引数のメッセージをモデルアトリビュートへセットします
+     *
+     * @param model {@link Mode}
+     * @param message メッセージ
+     */
+    public static final void addMessage(Model model, String message) {
+        if (message != null
+                && message.length() != 0) {
+            model.addAttribute("message", message);
+        }
+    }
+
+    /**
+     *
+     * 登録完了メッセージをモデルアトリビュートへセットします。
+     *
+     * @param model {@link Model}
+     */
+    public static final void addInsertDoneMessage(Model model) {
+        addMessage(model, "正常に登録が完了しました。");
+    }
+
+    /**
+     *
+     * 更新完了メッセージをモデルアトリビュートへセットします。
+     *
+     * @param model {@link Model}
+     */
+    public static final void addUpdateDoneMessage(Model model) {
+        addMessage(model, "正常に更新が完了しました。");
+    }
+
+    /**
+     *
+     * 削除完了メッセージをモデルアトリビュートへセットします。
+     *
+     * @param model {@link Model}
+     */
+    public static final void addDeleteDoneMessage(Model model) {
+        addMessage(model, "正常に削除が完了しました。");
     }
 }

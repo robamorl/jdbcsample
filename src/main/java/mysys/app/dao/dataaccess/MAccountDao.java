@@ -17,7 +17,7 @@ public interface MAccountDao {
     * @throws DataAccessException
     * @throws IncorrectResultSizeDataAccessException
     */
-    public MAccountDto find(Long accountId) throws DataAccessException,IncorrectResultSizeDataAccessException;
+    public MAccountDto find(Long accountId) throws DataAccessException, IncorrectResultSizeDataAccessException;
 
     /**
      *
@@ -27,6 +27,18 @@ public interface MAccountDao {
      * @return List<MAccountDto>
      */
     public List<MAccountDto> findAllByUserId(Long userId);
+
+    /**
+    *
+    * 主キーによる検索メソッド(削除済含む)
+    *
+    * @param accountId PK
+    * @return MAccountDto
+    * @throws DataAccessException
+    * @throws IncorrectResultSizeDataAccessException
+    */
+    public MAccountDto findWithContainsDeleteRec(Long accountId) throws DataAccessException,
+            IncorrectResultSizeDataAccessException;
 
     /**
      *
@@ -70,7 +82,6 @@ public interface MAccountDao {
      * @throws DataAccessException
      */
     public void logicalDelete(Long accountId) throws DataAccessException;
-
 
     /**
      *

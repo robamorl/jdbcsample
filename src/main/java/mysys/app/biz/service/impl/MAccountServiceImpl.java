@@ -31,7 +31,7 @@ public class MAccountServiceImpl implements MAccountService {
         try {
             return accountDao.findAllByUserId(userId);
         } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("ユーザに紐づく口座が見つかりませんでした。");
+            throw new DataNotFoundException("口座に紐づく口座が見つかりませんでした。");
         }
     }
 
@@ -60,9 +60,9 @@ public class MAccountServiceImpl implements MAccountService {
     public MAccountDto execUpdate(MAccountDto account) throws DataNotFoundException {
         try {
             accountDao.update(account);
-            return accountDao.find(account.getUserId());
+            return accountDao.find(account.getAccountId());
         } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("ユーザが見つかりませんでした。");
+            throw new DataNotFoundException("口座が見つかりませんでした。");
         }
     }
 
@@ -71,10 +71,11 @@ public class MAccountServiceImpl implements MAccountService {
      */
     public MAccountDto execDelete(Long accountId) throws DataNotFoundException {
         try {
-            accountDao.delete(accountId);
-            return accountDao.find(accountId);
+            MAccountDto dto = accountDao.find(accountId);
+            accountDao.delete(dto.getAccountId());
+            return dto;
         } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("ユーザが見つかりませんでした。");
+            throw new DataNotFoundException("口座が見つかりませんでした。");
         }
     }
 
@@ -84,9 +85,9 @@ public class MAccountServiceImpl implements MAccountService {
     public MAccountDto execLogicalDelete(Long accountId) throws DataNotFoundException {
         try {
             accountDao.logicalDelete(accountId);
-            return accountDao.find(accountId);
+            return accountDao.findWithContainsDeleteRec(accountId);
         } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("ユーザが見つかりませんでした。");
+            throw new DataNotFoundException("口座が見つかりませんでした。");
         }
     }
 

@@ -4,7 +4,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import mysys.app.biz.domain.MUserDto;
+
 import org.hibernate.validator.constraints.Email;
+import org.springframework.beans.BeanUtils;
 
 /**
  *
@@ -33,6 +36,29 @@ public class UserForm {
     @Size(max=100)
     @Email
     private String mailAddress;
+
+    /**
+    *
+    * DTOの内容をコピーする
+    *
+    * @param dto MUserDto
+    */
+   public void copyFrom(MUserDto dto) {
+       // 基本は全てコピー
+       BeanUtils.copyProperties(dto, this);
+   }
+
+   /**
+    *
+    * Formの内容からDTOを作成する
+    *
+    * @return Formの内容をコピーしたDTO
+    */
+   public MUserDto createDto() {
+       MUserDto dto = new  MUserDto();
+       BeanUtils.copyProperties(this, dto);
+       return dto;
+   }
 
     /**
      * @return userId

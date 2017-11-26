@@ -1,13 +1,16 @@
-package mysys.app.web.controller.user;
+package mysys.app.web.controller.account;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import javax.validation.Valid;
 
+import mysys.app.biz.common.kubun.AccountKubun;
+import mysys.app.biz.common.util.KubunUtil;
 import mysys.app.biz.common.util.ProjectCommonUtil;
-import mysys.app.biz.service.MUserService;
+import mysys.app.biz.service.MAccountService;
 import mysys.app.biz.service.exception.DataNotFoundException;
-import mysys.app.web.form.UserForm;
+import mysys.app.biz.service.exception.SystemException;
+import mysys.app.web.form.AccountForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -17,17 +20,18 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
-@RequestMapping("/user/list")
-@SessionAttributes(value = "editUser")
-public class UserCreateController {
+@RequestMapping("/account/list/{accountId}")
+@SessionAttributes(value = "editAccount")
+public class AccountEditController {
 
     @Autowired
-    MUserService mUserService;
+    MAccountService mAccountService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -38,12 +42,17 @@ public class UserCreateController {
      *
      * edit
      *
+     * @param accountId
      * @param model
      * @return
+     * @throws DataNotFoundException
+     * @throws SystemException
      */
-    @RequestMapping(path = "/create", method = GET)
-    public  String redirectToEntryForm(Model model) {
-        model.addAttribute("editUser", new UserForm());
+    @RequestMapping(path = "/edit", method = GET)
+    public  String redirectToEntryForm(@PathVariable Long accountId, Model model) throws DataNotFoundException, SystemException {
+        AccountForm accountForm = new AccountForm();
+        accountForm.copyFrom(mAccountService.execFind(accountId));
+        model.addAttribute("editAccount", accountForm);
         return "redirect:enter";
     }
 
@@ -51,26 +60,35 @@ public class UserCreateController {
      *
      * enter
      *
+     * @param model
      * @return
      */
     @RequestMapping(path = "/enter", method = GET)
-    public String showEntryForm() {
-        return "user/create/enter";
+    public String showEntryForm(Model model) {
+        // 口座区分をセット
+        model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
+        return "account/edit/enter";
     }
 
     /**
      *
      * validate
      *
-     * @param userFrom
+     * @param accountForm
      * @param errors
+     * @param model
      * @return
      */
     @RequestMapping(path = "/enter", params="_event_proceed", method=POST)
-    public String verify(@Valid @ModelAttribute("editUser") UserForm userFrom, Errors errors) {
+    public String verify(@Valid @ModelAttribute("editAccount") AccountForm accountForm, Errors errors, Model model) {
         if (errors.hasErrors()) {
-            return "user/create/enter";
+            // 口座区分をセット
+            model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
+            return "account/edit/enter";
         }
+        // 問題なければ選択された区分値を元に区分名をセット
+        accountForm.setAccountKubunMei(KubunUtil.getKubunMei(AccountKubun.ACCOUNT_KUBUN_LIST,
+                accountForm.getAccountKubun()));
         return "redirect:review";
     }
 
@@ -82,7 +100,7 @@ public class UserCreateController {
      */
     @RequestMapping(path = "/enter", params = "_event_back", method = POST)
     public String backList() {
-        return "redirect:/user/list";
+        return "redirect:/account/list";
     }
 
     /**
@@ -93,7 +111,7 @@ public class UserCreateController {
      */
     @RequestMapping(path = "/review", method=GET)
     public String showReview() {
-        return "user/create/review";
+        return "account/edit/review";
     }
 
     /**
@@ -111,14 +129,14 @@ public class UserCreateController {
      *
      * 登録実行
      *
-     * @param userFrom
+     * @param accountForm
      * @return
      * @throws DataNotFoundException
      */
     @RequestMapping(path = "/review", params = "_event_confirmed", method=POST)
-    public String execRegister(@ModelAttribute("editUser") UserForm userFrom) throws DataNotFoundException {
-        mUserService.execInsert(userFrom.createDto());
-        return "redirect:created";
+    public String execRegister(@ModelAttribute("editAccount") AccountForm accountForm) throws DataNotFoundException {
+        mAccountService.execUpdate(accountForm.createDto());
+        return "redirect:edited";
     }
 
     /**
@@ -129,10 +147,10 @@ public class UserCreateController {
      * @param model
      * @return
      */
-    @RequestMapping(path = "/created", method = GET)
+    @RequestMapping(path = "/edited", method = GET)
     public String showEdited(SessionStatus sessionStatus, Model model) {
         sessionStatus.setComplete();
-        ProjectCommonUtil.addInsertDoneMessage(model);
-        return "user/create/edited";
+        ProjectCommonUtil.addUpdateDoneMessage(model);
+        return "account/edit/edited";
     }
 }

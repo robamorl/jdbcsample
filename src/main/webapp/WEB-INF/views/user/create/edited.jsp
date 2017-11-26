@@ -10,6 +10,7 @@
 <BODY>
     <jsp:include page="../../header/login_info.jsp"/>
 	<h1>登録完了</h1>
+	<b style="color:#FF0000;"><c:out value="${message}" /></b>
 	<dl>
 		<dt>ユーザコード</dt>
 		<dd>

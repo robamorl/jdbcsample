@@ -9,3 +9,4 @@
   ログインユーザ：${user.userNameJp}<BR>
   権限：${user.description}
 </sec:authorize>
+<BR>

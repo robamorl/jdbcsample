@@ -20,6 +20,17 @@ public interface MUserDao {
     public MUserDto find(Long userId) throws DataAccessException,IncorrectResultSizeDataAccessException;
 
     /**
+    *
+    * 主キーによる検索メソッド(削除済含む)
+    *
+    * @param userId PK
+    * @return MUser
+    * @throws DataAccessException
+    * @throws IncorrectResultSizeDataAccessException
+    */
+    public MUserDto findWithContainsDeleteRec(Long userId) throws DataAccessException,IncorrectResultSizeDataAccessException;
+
+    /**
      *
      * 全件検索メソッド
      *

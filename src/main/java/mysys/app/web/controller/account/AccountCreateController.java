@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import mysys.app.biz.common.kubun.AccountKubun;
 import mysys.app.biz.common.util.KubunUtil;
+import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.service.MAccountService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 import mysys.app.web.form.AccountForm;
@@ -67,11 +68,14 @@ public class AccountCreateController {
      *
      * @param accountForm {@link AccountForm}
      * @param errors {@link Errors}
+     * @param model {@link Model}
      * @return URI
      */
     @RequestMapping(path = "/enter", params="_event_proceed", method=POST)
-    public String verify(@Valid @ModelAttribute("editAccount") AccountForm accountForm, Errors errors) {
+    public String verify(@Valid @ModelAttribute("editAccount") AccountForm accountForm, Errors errors, Model model) {
         if (errors.hasErrors()) {
+            // 口座区分をセット
+            model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
             return "account/create/enter";
         }
         // 問題なければ選択された区分値を元に区分名をセット
@@ -132,11 +136,13 @@ public class AccountCreateController {
      * 登録完了画面表示
      *
      * @param sessionStatus
+     * @param model
      * @return URI
      */
     @RequestMapping(path = "/created", method = GET)
-    public String showEdited(SessionStatus sessionStatus) {
+    public String showEdited(SessionStatus sessionStatus, Model model) {
         sessionStatus.setComplete();
+        ProjectCommonUtil.addInsertDoneMessage(model);
         return "account/create/edited";
     }
 }

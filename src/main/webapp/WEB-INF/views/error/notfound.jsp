@@ -4,12 +4,12 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>指定されたユーザは見つかりません</title>
+<title>指定されたデータは見つかりません</title>
 </HEAD>
 <BODY>
     <jsp:include page="../header/login_info.jsp"/>
-	<h1>指定されたユーザは見つかりません</h1>
-	<c:url value="/customer" var="url" />
-	<a href="${url}">一覧画面へ戻る</a>
+	<h1>指定されたデータは見つかりません</h1>
+	<c:url value="/" var="url" />
+	<button onclick="location.href='${url}'">トップへ戻る</button>
 </BODY>
 </HTML>

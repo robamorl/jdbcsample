@@ -53,11 +53,29 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
     /**
      * {@inheritDoc}
      */
-    public MAccountDto find(Long accountId) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
+    public MAccountDto find(Long accountId) throws EmptyResultDataAccessException,
+            IncorrectResultSizeDataAccessException {
         SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, accountId);
         try {
             return jdbcTemplate
                     .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new MAccountMapper());
+        } catch (EmptyResultDataAccessException e1) {
+            throw e1;
+        } catch (IncorrectResultSizeDataAccessException e2) {
+            throw e2;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public MAccountDto findWithContainsDeleteRec(Long accountId) throws EmptyResultDataAccessException,
+            IncorrectResultSizeDataAccessException {
+        SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, accountId);
+        try {
+            return jdbcTemplate
+                    .queryForObject(super.getSelectQueryByConditionWithContainsDeletedRecord(TABLE_NAME, condition),
+                            new MAccountMapper());
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         } catch (IncorrectResultSizeDataAccessException e2) {
@@ -104,6 +122,7 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
      * {@inheritDoc}
      */
     public void update(MAccountDto account) throws EmptyResultDataAccessException {
+        super.copyLogData(this.find(account.getAccountId()), account);
         account.setUpdateData();
         try {
             namedParameterJdbcTemplate.update(super.getUpdateQuery(TABLE_NAME, COLUMNS, account.getAccountId()),
@@ -137,7 +156,7 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
     /**
      * {@inheritDoc}
      */
-    public Long getPkByNextVal()  throws DataAccessException {
+    public Long getPkByNextVal() throws DataAccessException {
         return jdbcTemplate.queryForObject(super.getSequenceSelectQuery(ACCOUNT_ID), Long.class);
     }
 

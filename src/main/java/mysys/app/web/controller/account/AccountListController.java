@@ -5,6 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.MAccountDto;
 import mysys.app.biz.service.MAccountService;
 import mysys.app.biz.service.exception.DataNotFoundException;
@@ -15,6 +16,7 @@ import mysys.security.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,12 +31,14 @@ public class AccountListController {
      *
      * 一覧画面遷移
      *
+     * @param message 各種メッセージ
      * @param model {@link Model}
      * @return URI
      * @throws SystemException
      */
     @RequestMapping(path = {"/", "/list"}, method = GET)
-    public String showAllAccount(Model model) throws SystemException {
+    public String showAllAccount(@ModelAttribute("message") String message, Model model) throws SystemException {
+        ProjectCommonUtil.addMessage(model, message);
         List<MAccountDto> accountList = null;
         try {
             accountList = mAccountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
@@ -73,5 +77,22 @@ public class AccountListController {
         form.copyFrom(account);
         model.addAttribute("account", form);
         return "account/detail";
+    }
+
+    /**
+     *
+     * 削除処理
+     *
+     * @param accountId 口座ID
+     * @param model {@link Model}
+     * @return URI
+     * @throws DataNotFoundException
+     */
+    @RequestMapping(value = "/list/{accountId}/delete", method = GET)
+    public String execDelete(@PathVariable Long accountId, Model model)
+                                        throws DataNotFoundException{
+        mAccountService.execLogicalDelete(accountId);
+        ProjectCommonUtil.addDeleteDoneMessage(model);
+        return "redirect:/account/";
     }
 }

@@ -3,8 +3,11 @@ package mysys.app.dao.dataaccess.common;
 import java.text.MessageFormat;
 import java.util.List;
 
+import mysys.app.biz.domain.common.CommonDomain;
 import mysys.app.dao.common.SqlColumn;
 import mysys.app.dao.common.SqlCondition;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 
 public class CommonDao {
 
@@ -15,13 +18,16 @@ public class CommonDao {
     public static final SqlColumn DELETE_FLG = new SqlColumn("DELETE_FLG", "deleteFlg");
 
     /** SELECT QUERY */
+    private static final String SELECT_NORMAL_QUERY = "SELECT * FROM {0} WHERE DELETE_FLG = 0 ";
+
+    /** SELECT QUERY */
     private static final String SELECT_QUERY = "SELECT * FROM {0} ";
 
     /** SELECT SEQUENCE QUERY */
     private static final String SELECT_SEQUENCE_QUERY = "SELECT {0} FROM DUAL ";
 
     /** UPDATE QUERY */
-    private static final String UPDATE_QUERY = "UPDATE {0} SET {1} WHERE {2}";
+    private static final String UPDATE_QUERY = "UPDATE {0} SET {1} WHERE  DELETE_FLG = 0 AND {2}";
 
     /** INSERT QUERY */
     private static final String INSERT_QUERY = "INSERT INTO {0} ({1}) VALUES ({2}) ";
@@ -49,7 +55,7 @@ public class CommonDao {
      * @return クエリー
      */
     protected String getSelectQueryByAll(String tableName) {
-        String query = MessageFormat.format(SELECT_QUERY, (Object)tableName);
+        String query = MessageFormat.format(SELECT_NORMAL_QUERY, (Object)tableName);
        return  query;
     }
 
@@ -62,6 +68,25 @@ public class CommonDao {
      * @return クエリー
      */
     protected String getSelectQueryByCondition(String tableName, SqlCondition... conditions) {
+        StringBuffer query = new StringBuffer();
+        query.append(MessageFormat.format(SELECT_NORMAL_QUERY, (Object)tableName));
+        if (conditions != null) {
+            query.append("AND ");
+            query.append(this.getCondition(conditions));
+        }
+        return query.toString();
+    }
+
+
+    /**
+    *
+    * 条件付き検索用SQL発行(削除フラグONを含む)
+    *
+    * @param tableName テーブル名
+    * @param conditions 条件
+    * @return クエリー
+    */
+    protected String getSelectQueryByConditionWithContainsDeletedRecord(String tableName, SqlCondition... conditions) {
         StringBuffer query = new StringBuffer();
         query.append(MessageFormat.format(SELECT_QUERY, (Object)tableName));
         if (conditions != null) {
@@ -223,4 +248,26 @@ public class CommonDao {
         return MessageFormat.format(SEQUENCE_NAME, (Object)pk.getColumnName());
     }
 
+    /**
+     *
+     * sourceからログ系の情報をtargetへコピーします。
+     *
+     * @param source コピー元
+     * @param target コピー先
+     * @throws EmptyResultDataAccessException
+     */
+    protected void copyLogData(CommonDomain source, CommonDomain target) throws EmptyResultDataAccessException {
+        if (source.getDeleteFlg().booleanValue()) {
+            // 削除済の場合
+            throw new EmptyResultDataAccessException("想定外：対象データが削除済の可能性があります。", 0);
+        }
+        target.setEntryDate(source.getEntryDate());
+        target.setEntryUser(source.getEntryUser());
+        target.setUpdateDate(source.getUpdateDate());
+        target.setUpdateUser(source.getUpdateUser());
+        if (target.getDeleteFlg() == null
+                || !target.getDeleteFlg().booleanValue()) {
+            target.setDeleteFlg(source.getDeleteFlg());
+        }
+    }
 }

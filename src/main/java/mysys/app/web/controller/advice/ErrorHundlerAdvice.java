@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 @Component
 @ControllerAdvice(annotations = Controller.class)
-public class CustomerControllerAdvice {
+public class ErrorHundlerAdvice {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {

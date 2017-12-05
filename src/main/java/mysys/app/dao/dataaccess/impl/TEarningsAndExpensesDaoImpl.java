@@ -115,7 +115,7 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
      * {@inheritDoc}
      */
     public void insert(TEarningsAndExpensesDto earningsAndExpenses) {
-        earningsAndExpenses.setAccountId(this.getPkByNextVal());
+        earningsAndExpenses.setEarningsAndExpensesId(this.getPkByNextVal());
         earningsAndExpenses.setEntryData();
         namedParameterJdbcTemplate.update(super.getInsertQuery(TABLE_NAME, COLUMNS),
                 new BeanPropertySqlParameterSource(earningsAndExpenses));
@@ -169,8 +169,8 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
             earningsAndExpenses.setEarningsAndExpensesId(rs.getLong(EARNINGS_AND_EXPENSES_ID.getColumnName()));
             earningsAndExpenses.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
             earningsAndExpenses.setEarningsAndExpensesKubun(rs.getString(EARNINGS_AND_EXPENSES_KUBUN.getColumnName()));
-            earningsAndExpenses.setAmount(rs.getLong(AMOUNT.getColumnName()));
-            earningsAndExpenses.setTransactionDate(rs.getString(TRANSACTION_DATE.getColumnName()));
+            earningsAndExpenses.setAmount(rs.getBigDecimal(AMOUNT.getColumnName()));
+            earningsAndExpenses.setTransactionDate(rs.getDate(TRANSACTION_DATE.getColumnName()));
             earningsAndExpenses.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));
             earningsAndExpenses.setEntryUser(rs.getString(CommonDao.ENTRY_USER.getColumnName()));
             earningsAndExpenses.setUpdateDate(rs.getTimestamp(CommonDao.UPDATE_DATE.getColumnName()));

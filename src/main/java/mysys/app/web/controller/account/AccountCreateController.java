@@ -43,7 +43,7 @@ public class AccountCreateController {
      * @return URI
      */
     @RequestMapping(path = "/create", method = GET)
-    public  String redirectToEntryForm() {
+    public String redirectToEntryForm() {
         return "redirect:enter";
     }
 
@@ -71,8 +71,10 @@ public class AccountCreateController {
      * @param model {@link Model}
      * @return URI
      */
-    @RequestMapping(path = "/enter", params="_event_proceed", method=POST)
+    @RequestMapping(path = "/enter", params = "_event_proceed", method = POST)
     public String verify(@Valid @ModelAttribute("editAccount") AccountForm accountForm, Errors errors, Model model) {
+        // Validate
+        this.validateForRegister(accountForm, errors);
         if (errors.hasErrors()) {
             // 口座区分をセット
             model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
@@ -101,7 +103,7 @@ public class AccountCreateController {
      *
      * @return URI
      */
-    @RequestMapping(path = "/review", method=GET)
+    @RequestMapping(path = "/review", method = GET)
     public String showReview() {
         return "account/create/review";
     }
@@ -125,9 +127,10 @@ public class AccountCreateController {
      * @return URI
      * @throws DataNotFoundException
      */
-    @RequestMapping(path = "/review", params = "_event_confirmed", method=POST)
+    @RequestMapping(path = "/review", params = "_event_confirmed", method = POST)
     public String execRegister(@ModelAttribute("editAccount") AccountForm accountForm) throws DataNotFoundException {
-        mAccountService.execInsert(accountForm.createDto());
+        // 口座の登録
+        mAccountService.execInsert(accountForm.createDto()).getAccountId();
         return "redirect:created";
     }
 
@@ -144,5 +147,23 @@ public class AccountCreateController {
         sessionStatus.setComplete();
         ProjectCommonUtil.addInsertDoneMessage(model);
         return "account/create/edited";
+    }
+
+    /**
+     *
+     * 登録時のValidate
+     *
+     * @param accountForm {@link AccountForm}
+     * @param errors {@link Errors}
+     */
+    private void validateForRegister(AccountForm accountForm, Errors errors) {
+        /* === 同じ口座番号が存在していないか === */
+        try {
+            mAccountService.execFindByAccountNumber(accountForm.getAccountNumber());
+            // 存在していたらエラー
+            errors.rejectValue("accountNumber", "exists.true");
+        } catch (DataNotFoundException e) {
+            // 存在していなければOK
+        }
     }
 }

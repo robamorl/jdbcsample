@@ -69,6 +69,22 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
     /**
      * {@inheritDoc}
      */
+    public MAccountDto findByAccountNumber(String accountNumber) throws EmptyResultDataAccessException,
+            IncorrectResultSizeDataAccessException {
+        SqlCondition condition = new SqlCondition(ACCOUNT_NUMBER.getColumnName(), SqlCondition.EQ, accountNumber);
+        try {
+            return jdbcTemplate
+                    .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new MAccountMapper());
+        } catch (EmptyResultDataAccessException e1) {
+            throw e1;
+        } catch (IncorrectResultSizeDataAccessException e2) {
+            throw e2;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public MAccountDto findWithContainsDeleteRec(Long accountId) throws EmptyResultDataAccessException,
             IncorrectResultSizeDataAccessException {
         SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, accountId);

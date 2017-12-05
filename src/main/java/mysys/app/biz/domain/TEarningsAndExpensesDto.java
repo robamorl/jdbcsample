@@ -5,6 +5,8 @@ package mysys.app.biz.domain;
  * generated Date Thu Nov 30 23:20:57 JST 2017
  */
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import mysys.app.biz.domain.common.CommonDomain;
 
@@ -27,10 +29,10 @@ public class TEarningsAndExpensesDto extends CommonDomain implements Serializabl
     private String earningsAndExpensesKubun;
 
     /** AMOUNT*/
-    private Long amount;
+    private BigDecimal amount;
 
     /** TRANSACTION_DATE*/
-    private String transactionDate;
+    private Date transactionDate;
 
     /**
      * @return earningsAndExpensesId
@@ -56,14 +58,14 @@ public class TEarningsAndExpensesDto extends CommonDomain implements Serializabl
     /**
      * @return amount
      */
-    public final Long getAmount() {
+    public final BigDecimal getAmount() {
         return amount;
     }
 
     /**
      * @return transactionDate
      */
-    public final String getTransactionDate() {
+    public final Date getTransactionDate() {
         return transactionDate;
     }
 
@@ -91,14 +93,14 @@ public class TEarningsAndExpensesDto extends CommonDomain implements Serializabl
     /**
      * @param amount セットする amount
      */
-    public final void setAmount(Long amount) {
+    public final void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
     /**
      * @param transactionDate セットする transactionDate
      */
-    public final void setTransactionDate(String transactionDate) {
+    public final void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
     }
 

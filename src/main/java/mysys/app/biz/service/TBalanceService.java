@@ -2,42 +2,32 @@ package mysys.app.biz.service;
 
 import java.util.List;
 
-import mysys.app.biz.domain.MAccountDto;
+import mysys.app.biz.domain.TBalanceDto;
 import mysys.app.biz.service.exception.DataNotFoundException;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public interface MAccountService {
+public interface TBalanceService {
 
     /**
      * PKによる検索
      *
-     * @param accountId PK
+     * @param balanceId PK
      * @return 検索結果
      * @throws DataNotFoundException
      */
-    public MAccountDto execFind(Long accountId) throws DataNotFoundException;
-
-    /**
-    *
-    * 口座番号による検索
-    *
-    * @param accountNo 口座番号
-    * @return 検索結果
-    * @throws DataNotFoundException
-    */
-   public MAccountDto execFindByAccountNumber(String accountNo) throws DataNotFoundException;
+    public TBalanceDto execFind(Long balanceId) throws DataNotFoundException;
 
     /**
      *
      * ユーザIDに紐づくデータの検索
      *
-     * @param accountId ユーザID
+     * @param accountId 口座ID
      * @return 検索結果
      * @throws DataNotFoundException
      */
-    public List<MAccountDto> execFindAllByUserId(Long accountId) throws DataNotFoundException;
+    public List<TBalanceDto> execFindAllByAccountId(Long accountId) throws DataNotFoundException;
 
     /**
     *
@@ -46,26 +36,26 @@ public interface MAccountService {
     * @return 検索結果
     * @throws DataNotFoundException
     */
-    public List<MAccountDto> execFindAll() throws DataNotFoundException;
+    public List<TBalanceDto> execFindAll() throws DataNotFoundException;
 
     /**
     *
     * データ新規挿入
     *
-    * @param account MUserDto
+    * @param accountId 口座ID
     * @return 登録したデータが格納されたDTO
     */
-    public MAccountDto execInsert(MAccountDto account);
+    public TBalanceDto execInsert(Long accountId);
 
     /**
     *
     * データ更新
     *
-    * @param account MUserDto
+    * @param balance TBalanceDto
     * @return 更新したデータが格納されたDTO
     * @throws DataNotFoundException
     */
-    public MAccountDto execUpdate(MAccountDto account) throws DataNotFoundException;
+    public TBalanceDto execUpdate(TBalanceDto balance) throws DataNotFoundException;
 
     /**
     *
@@ -75,16 +65,16 @@ public interface MAccountService {
     * @return 削除したデータが格納されたDTO
     * @throws DataNotFoundException
     */
-    public MAccountDto execDelete(Long accountId) throws DataNotFoundException;
+    public TBalanceDto execDelete(Long accountId) throws DataNotFoundException;
 
     /**
     *
     * データ削除(論理削除)
     *
-    * @param accountId PK
+    * @param balanceId PK
     * @return 削除したデータが格納されたDTO
     * @throws DataNotFoundException
     */
-    public MAccountDto execLogicalDelete(Long accountId) throws DataNotFoundException;
+    public TBalanceDto execLogicalDelete(Long balanceId) throws DataNotFoundException;
 
 }

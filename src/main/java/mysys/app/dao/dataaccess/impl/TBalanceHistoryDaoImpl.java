@@ -37,7 +37,7 @@ public class TBalanceHistoryDaoImpl extends CommonDao implements TBalanceHistory
     private SqlColumn ACCOUNT_ID = new SqlColumn("ACCOUNT_ID", "accountId");
     private SqlColumn BALANCE = new SqlColumn("BALANCE", "balance");
     private SqlColumn LATEST_BALANCE_HISTORY_ID = new SqlColumn("LATEST_BALANCE_HISTORY_ID", "latestBalanceHistoryId");
-    private SqlColumn EARNINGS_AND_EXPENSES_ID = new SqlColumn("EARNINGS_AND_EXPENSES_ID", "balanceHistoryId");
+    private SqlColumn EARNINGS_AND_EXPENSES_ID = new SqlColumn("EARNINGS_AND_EXPENSES_ID", "earningsAndExpensesId");
 
     private List<SqlColumn> COLUMNS = Arrays.asList(new SqlColumn[] {
             BALANCE_HISTORY_ID,
@@ -100,7 +100,7 @@ public class TBalanceHistoryDaoImpl extends CommonDao implements TBalanceHistory
      * {@inheritDoc}
      */
     public void insert(TBalanceHistoryDto balanceHistory) {
-        balanceHistory.setAccountId(this.getPkByNextVal());
+        balanceHistory.setBalanceHistoryId(this.getPkByNextVal());
         balanceHistory.setEntryData();
         namedParameterJdbcTemplate.update(super.getInsertQuery(TABLE_NAME, COLUMNS),
                 new BeanPropertySqlParameterSource(balanceHistory));
@@ -153,7 +153,7 @@ public class TBalanceHistoryDaoImpl extends CommonDao implements TBalanceHistory
             TBalanceHistoryDto balanceHistory = new TBalanceHistoryDto();
             balanceHistory.setBalanceHistoryId(rs.getLong(BALANCE_HISTORY_ID.getColumnName()));
             balanceHistory.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
-            balanceHistory.setBalance(rs.getLong(BALANCE.getColumnName()));
+            balanceHistory.setBalance(rs.getBigDecimal(BALANCE.getColumnName()));
             balanceHistory.setLatestBalanceHistoryId(rs.getLong(LATEST_BALANCE_HISTORY_ID.getColumnName()));
             balanceHistory.setEarningsAndExpensesId(rs.getLong(EARNINGS_AND_EXPENSES_ID.getColumnName()));
             balanceHistory.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));

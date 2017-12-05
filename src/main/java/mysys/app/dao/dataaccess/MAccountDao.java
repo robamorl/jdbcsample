@@ -21,6 +21,17 @@ public interface MAccountDao {
 
     /**
      *
+     * 口座番号による検索
+     *
+     * @param accountNo 口座番号
+     * @return MAccountDto
+     * @throws DataAccessException
+     * @throws IncorrectResultSizeDataAccessException
+     */
+    public MAccountDto findByAccountNumber(String accountNo) throws DataAccessException, IncorrectResultSizeDataAccessException;
+
+    /**
+     *
      * ユーザIDに紐づくMAccountの検索
      *
      * @param userId ユーザID

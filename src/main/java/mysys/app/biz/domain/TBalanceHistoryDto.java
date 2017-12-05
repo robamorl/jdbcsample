@@ -5,8 +5,11 @@ package mysys.app.biz.domain;
  * generated Date Thu Nov 30 23:34:23 JST 2017
  */
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import mysys.app.biz.domain.common.CommonDomain;
+
+import org.springframework.beans.BeanUtils;
 
 /**
  * T_balance_historyVo.
@@ -17,6 +20,7 @@ import mysys.app.biz.domain.common.CommonDomain;
  * [1]		2017/11/30	Ryuji		Generated.
  */
 public class TBalanceHistoryDto extends CommonDomain implements Serializable {
+
     /** BALANCE_HISTORY_ID*/
     private Long balanceHistoryId;
 
@@ -24,13 +28,33 @@ public class TBalanceHistoryDto extends CommonDomain implements Serializable {
     private Long accountId;
 
     /** BALANCE*/
-    private Long balance;
+    private BigDecimal balance;
 
     /** LATEST_BALANCE_HISTORY_ID*/
     private Long latestBalanceHistoryId;
 
     /** EARNINGS_AND_EXPENSES_ID*/
     private Long earningsAndExpensesId;
+
+    /**
+     *
+     * デフォルトコンストラクタ
+     *
+     */
+    public TBalanceHistoryDto() {
+        super();
+    }
+
+    /**
+     *
+     * コピー用コンストラクタ
+     *
+     * @param balance 残高
+     */
+    public TBalanceHistoryDto(TBalanceDto balance) {
+        super();
+        BeanUtils.copyProperties(balance, this);
+    }
 
     /**
      * @return balanceHistoryId
@@ -49,7 +73,7 @@ public class TBalanceHistoryDto extends CommonDomain implements Serializable {
     /**
      * @return balance
      */
-    public final Long getBalance() {
+    public final BigDecimal getBalance() {
         return balance;
     }
 
@@ -84,7 +108,7 @@ public class TBalanceHistoryDto extends CommonDomain implements Serializable {
     /**
      * @param balance セットする balance
      */
-    public final void setBalance(Long balance) {
+    public final void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

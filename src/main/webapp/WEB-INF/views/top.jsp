@@ -16,6 +16,7 @@
       <li><a href="user/">ユーザ管理</a></li>
   </sec:authorize>
   <li><a href="account/">口座管理</a></li>
+  <li><a href="eae/">収支管理</a></li>
 </ul>
 <form action="logout" method="post">
   <sec:csrfInput />

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import mysys.app.biz.common.kubun.AccountKubun;
 import mysys.app.biz.common.util.KubunUtil;
 import mysys.app.biz.common.util.ProjectCommonUtil;
+import mysys.app.biz.domain.MAccountDto;
 import mysys.app.biz.service.MAccountService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 import mysys.app.biz.service.exception.SystemException;
@@ -81,6 +82,7 @@ public class AccountEditController {
      */
     @RequestMapping(path = "/enter", params="_event_proceed", method=POST)
     public String verify(@Valid @ModelAttribute("editAccount") AccountForm accountForm, Errors errors, Model model) {
+        this.validateForUpdate(accountForm, errors);
         if (errors.hasErrors()) {
             // 口座区分をセット
             model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
@@ -153,4 +155,24 @@ public class AccountEditController {
         ProjectCommonUtil.addUpdateDoneMessage(model);
         return "account/edit/edited";
     }
+
+    /**
+    *
+    * 更新時のValidate
+    *
+    * @param accountForm {@link AccountForm}
+    * @param errors {@link Errors}
+    */
+   private void validateForUpdate(AccountForm accountForm, Errors errors) {
+       /* === 同じ口座番号が存在していないか === */
+       try {
+           MAccountDto accountDto = mAccountService.execFindByAccountNumber(accountForm.getAccountNumber());
+           // 自身以外で存在していたらエラー
+           if (!accountForm.getAccountId().equals(accountDto.getAccountId())) {
+               errors.rejectValue("accountNumber", "exists.true");
+           }
+       } catch (DataNotFoundException e) {
+           // 存在していなければOK
+       }
+   }
 }

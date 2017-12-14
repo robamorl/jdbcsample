@@ -12,6 +12,10 @@
 	<h1>口座登録画面</h1>
 	<form:form modelAttribute="editAccount">
 		<dl>
+			<dt>口座名</dt>
+			<dd>
+				<form:input path="accountName" />
+				<form:errors path="accountName" />
 			<dt>口座番号</dt>
 			<dd>
 				<form:input path="accountNumber" />
@@ -19,7 +23,8 @@
 			</dd>
 			<dt>口座区分</dt>
 			<dd>
-				<form:select path="accountKubun" items="${accountKubunList}" itemLabel="label" itemValue="value"/>
+				<form:select path="accountKubun" items="${accountKubunList}"
+					itemLabel="label" itemValue="value" />
 				<form:errors path="accountKubun" />
 			</dd>
 		</dl>

@@ -12,6 +12,9 @@
 	<h1>確認画面</h1>
 	<form method="post">
 		<dl>
+			<dt>口座名</dt>
+			<dd>
+				<c:out value="${editAccount.accountName}" />
 			<dt>口座番号</dt>
 			<dd>
 				<c:out value="${editAccount.accountNumber}" />

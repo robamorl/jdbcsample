@@ -1,16 +1,20 @@
 package mysys.app.dao.common;
 
+import java.util.List;
+
 public class SqlCondition {
 
     private String column;
     private String condition;
     private Object compared;
+    private List<Object> comparedList;
 
     public static final String EQ = "=";
     public static final String GT = "<";
     public static final String GE = "<=";
     public static final String LT = ">";
     public static final String LE = ">=";
+    public static final String IN = "IN";
 
     public SqlCondition(String column, String conditon, Object compared) {
         this.column = column;
@@ -18,8 +22,33 @@ public class SqlCondition {
         this.compared = compared;
     }
 
+    public SqlCondition(String column, String conditon, List<Object> comparedList) {
+        this.column = column;
+        this.condition = conditon;
+        this.comparedList = comparedList;
+    }
+
     public final String getConditionQuery() {
-        return this.getColumn() + " " + this.getCondition() + " " + this.getCompared().toString();
+        StringBuffer query = new StringBuffer();
+        if (IN.equals(this.getCondition())) {
+            // IN句の場合
+            query.append(this.getColumn());
+            query.append(" ");
+            query.append(this.getCondition());
+            query.append(" (");
+            for (Object comparedElm : this.getComparedList()) {
+                query.append(comparedElm.toString());
+            }
+            query.append(")");
+        } else {
+            // 上記以外
+            query.append(this.getColumn());
+            query.append(" ");
+            query.append(this.getCondition());
+            query.append(" ");
+            query.append(this.getCompared().toString());
+        }
+        return query.toString();
     }
 
     /**
@@ -57,6 +86,20 @@ public class SqlCondition {
      */
     public final void setCompared(Object compared) {
         this.compared = compared;
+    }
+
+    /**
+     * @return comparedList
+     */
+    public final List<Object> getComparedList() {
+        return comparedList;
+    }
+
+    /**
+     * @param comparedList セットする comparedList
+     */
+    public final void setComparedList(List<Object> comparedList) {
+        this.comparedList = comparedList;
     }
 
 

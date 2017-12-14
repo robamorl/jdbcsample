@@ -14,6 +14,10 @@
 		<input type="hidden" name="${editAccount.accountId}" />
 		<input type="hidden" name="${editAccount.userId}" />
 		<dl>
+			<dt>口座名</dt>
+			<dd>
+				<form:input path="accountName" />
+				<form:errors path="accountName" />
 			<dt>口座番号</dt>
 			<dd>
 				<form:input path="accountNumber" />

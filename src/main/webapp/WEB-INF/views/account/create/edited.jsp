@@ -12,6 +12,9 @@
 	<h1>登録完了</h1>
 	<b style="color: #FF0000;"><c:out value="${message}" /></b>
 	<dl>
+		<dt>口座名</dt>
+		<dd>
+			<c:out value="${editAccount.accountName}" />
 		<dt>口座番号</dt>
 		<dd>
 			<c:out value="${editAccount.accountNumber}" />

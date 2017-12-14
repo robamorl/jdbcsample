@@ -21,6 +21,9 @@ public class MAccountDto extends CommonDomain implements Serializable{
     /** ACCOUNT_ID*/
     private Long accountId;
 
+    /** ACCOUNT_NAME */
+    private String accountName;
+
     /** ACCOUNT_NUMBER*/
     private String accountNumber;
 
@@ -84,6 +87,20 @@ public class MAccountDto extends CommonDomain implements Serializable{
      */
     public final void setAccountKubun(String accountKubun) {
         this.accountKubun = accountKubun;
+    }
+
+    /**
+     * @return accountName
+     */
+    public final String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * @param accountName セットする accountName
+     */
+    public final void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
 }

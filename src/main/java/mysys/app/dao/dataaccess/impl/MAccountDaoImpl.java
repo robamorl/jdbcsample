@@ -34,12 +34,14 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
 
     /** SQL COLUMN */
     private SqlColumn ACCOUNT_ID = new SqlColumn("ACCOUNT_ID", "accountId");
+    private SqlColumn ACCOUNT_NAME = new SqlColumn("ACCOUNT_NAME", "accountName");
     private SqlColumn ACCOUNT_NUMBER = new SqlColumn("ACCOUNT_NUMBER", "accountNumber");
     private SqlColumn USER_ID = new SqlColumn("USER_ID", "userId");
     private SqlColumn ACCOUNT_KUBUN = new SqlColumn("ACCOUNT_KUBUN", "accountKubun");
 
     private List<SqlColumn> COLUMNS = Arrays.asList(new SqlColumn[] {
             ACCOUNT_ID,
+            ACCOUNT_NAME,
             ACCOUNT_NUMBER,
             USER_ID,
             ACCOUNT_KUBUN,
@@ -180,6 +182,7 @@ public class MAccountDaoImpl extends CommonDao implements MAccountDao {
         public MAccountDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             MAccountDto account = new MAccountDto();
             account.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
+            account.setAccountName(rs.getString(ACCOUNT_NAME.getColumnName()));
             account.setAccountNumber(rs.getString(ACCOUNT_NUMBER.getColumnName()));
             account.setUserId(rs.getLong(USER_ID.getColumnName()));
             account.setAccountKubun(rs.getString(ACCOUNT_KUBUN.getColumnName()));

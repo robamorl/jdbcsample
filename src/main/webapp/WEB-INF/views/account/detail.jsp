@@ -11,6 +11,10 @@
 	<jsp:include page="../header/login_info.jsp" />
 	<h1>口座詳細画面</h1>
 	<dl>
+		<dt>口座名</dt>
+		<dd>
+			<c:out value="${account.accountName}" />
+		</dd>
 		<dt>口座番号</dt>
 		<dd>
 			<c:out value="${account.accountNumberForDisplay}" />
@@ -41,7 +45,8 @@
 	<c:url value="/account/list" var="url" />
 	<button onclick="location.href='${url}'">一覧</button>
 	<c:url value="/account/list/${account.accountId}/delete" var="url" />
-	<button onclick="if (confirm('口座番号「${account.accountNumberForDisplay}」を削除します。よろしいですか？')) {location.href='${url}'}">削除</button>
+	<button
+		onclick="if (confirm('口座番号「${account.accountNumberForDisplay}」を削除します。よろしいですか？')) {location.href='${url}'}">削除</button>
 
 </BODY>
 </HTML>

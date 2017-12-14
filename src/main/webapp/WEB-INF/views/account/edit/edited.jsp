@@ -14,6 +14,9 @@
 	<input type="hidden" name="${editAccount.accountId}" />
 	<input type="hidden" name="${editAccount.userId}" />
 	<dl>
+		<dt>口座名</dt>
+		<dd>
+			<c:out value="${editAccount.accountName}" />
 		<dt>口座番号</dt>
 		<dd>
 			<c:out value="${editAccount.accountNumber}" />

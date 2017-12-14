@@ -26,6 +26,10 @@ public class AccountForm {
 
     /** 口座ID */
     private Long accountId;
+    /** 口座名 */
+    @NotNull
+    @Size(max=30)
+    private String accountName;
     /** 口座番号 */
     @NotNull
     @Size(min=16, max=16)
@@ -209,6 +213,20 @@ public class AccountForm {
      */
     public final void setAccountKubun(String accountKubun) {
         this.accountKubun = accountKubun;
+    }
+
+    /**
+     * @return accountName
+     */
+    public final String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * @param accountName セットする accountName
+     */
+    public final void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
 }

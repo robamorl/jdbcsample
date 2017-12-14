@@ -10,9 +10,7 @@
 
 <h1>ログインページ</h1>
 <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-  ログインエラーです<br>
-  例外型：${SPRING_SECURITY_LAST_EXCEPTION.getClass().name}<br>
-  メッセージ：${SPRING_SECURITY_LAST_EXCEPTION.message}<br>
+  <b style="color:#FF0000;">ログインできませんでした。</b><br>
   <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
 </c:if>
 <form action="processLogin" method="post">

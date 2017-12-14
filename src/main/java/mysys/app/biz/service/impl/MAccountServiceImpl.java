@@ -42,11 +42,11 @@ public class MAccountServiceImpl implements MAccountService {
      * {@inheritDoc}
      */
     public List<MAccountDto> execFindAllByUserId(Long userId) throws DataNotFoundException {
-        try {
-            return accountDao.findAllByUserId(userId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("口座に紐づく口座が見つかりませんでした。");
-        }
+            List<MAccountDto> list =  accountDao.findAllByUserId(userId);
+            if (list.isEmpty()) {
+                throw new DataNotFoundException("ユーザに紐づく口座が見つかりませんでした。");
+            }
+            return list;
     }
 
     /**

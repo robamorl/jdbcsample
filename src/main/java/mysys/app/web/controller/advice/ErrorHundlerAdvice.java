@@ -22,7 +22,8 @@ public class ErrorHundlerAdvice {
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public String handleException() {
+    public String handleException(DataNotFoundException e, Model model) {
+        model.addAttribute("exception", e);
         return "error/notfound";
     }
 

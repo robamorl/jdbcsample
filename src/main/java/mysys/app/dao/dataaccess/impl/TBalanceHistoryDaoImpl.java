@@ -37,14 +37,14 @@ public class TBalanceHistoryDaoImpl extends CommonDao implements TBalanceHistory
     private SqlColumn ACCOUNT_ID = new SqlColumn("ACCOUNT_ID", "accountId");
     private SqlColumn BALANCE = new SqlColumn("BALANCE", "balance");
     private SqlColumn LATEST_BALANCE_HISTORY_ID = new SqlColumn("LATEST_BALANCE_HISTORY_ID", "latestBalanceHistoryId");
-    private SqlColumn EARNINGS_AND_EXPENSES_ID = new SqlColumn("EARNINGS_AND_EXPENSES_ID", "earningsAndExpensesId");
+    private SqlColumn BALANCE_OF_PAYMENTS_ID = new SqlColumn("BALANCE_OF_PAYMENTS_ID", "balanceOfPaymentsId");
 
     private List<SqlColumn> COLUMNS = Arrays.asList(new SqlColumn[] {
             BALANCE_HISTORY_ID,
             ACCOUNT_ID,
             BALANCE,
             LATEST_BALANCE_HISTORY_ID,
-            EARNINGS_AND_EXPENSES_ID,
+            BALANCE_OF_PAYMENTS_ID,
             ENTRY_DATE,
             ENTRY_USER,
             UPDATE_DATE,
@@ -155,7 +155,7 @@ public class TBalanceHistoryDaoImpl extends CommonDao implements TBalanceHistory
             balanceHistory.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
             balanceHistory.setBalance(rs.getBigDecimal(BALANCE.getColumnName()));
             balanceHistory.setLatestBalanceHistoryId(rs.getLong(LATEST_BALANCE_HISTORY_ID.getColumnName()));
-            balanceHistory.setEarningsAndExpensesId(rs.getLong(EARNINGS_AND_EXPENSES_ID.getColumnName()));
+            balanceHistory.setBalanceOfPaymentsId(rs.getLong(BALANCE_OF_PAYMENTS_ID.getColumnName()));
             balanceHistory.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));
             balanceHistory.setEntryUser(rs.getString(CommonDao.ENTRY_USER.getColumnName()));
             balanceHistory.setUpdateDate(rs.getTimestamp(CommonDao.UPDATE_DATE.getColumnName()));

@@ -6,6 +6,7 @@
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>口座詳細画面</title>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/common.css" />">
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />

@@ -16,37 +16,48 @@ public class SqlCondition {
     public static final String LE = ">=";
     public static final String IN = "IN";
 
+    @SuppressWarnings("unchecked")
     public SqlCondition(String column, String conditon, Object compared) {
         this.column = column;
         this.condition = conditon;
-        this.compared = compared;
-    }
-
-    public SqlCondition(String column, String conditon, List<Object> comparedList) {
-        this.column = column;
-        this.condition = conditon;
-        this.comparedList = comparedList;
+        if (compared instanceof List) {
+            this.comparedList = (List<Object>)compared;
+        } else {
+            this.compared = compared;
+        }
     }
 
     public final String getConditionQuery() {
         StringBuffer query = new StringBuffer();
         if (IN.equals(this.getCondition())) {
             // IN句の場合
-            query.append(this.getColumn());
-            query.append(" ");
-            query.append(this.getCondition());
-            query.append(" (");
-            for (Object comparedElm : this.getComparedList()) {
-                query.append(comparedElm.toString());
+            if (!this.getComparedList().isEmpty()) {
+                // 検索するリストが空でない場合は追加
+                query.append(this.getColumn());
+                query.append(" ");
+                query.append(this.getCondition());
+                query.append(" (");
+                int sizeCount = 1;
+                for (Object comparedElm : this.getComparedList()) {
+                    query.append(comparedElm.toString());
+                    if (sizeCount < this.getComparedList().size()) {
+                        query.append(",");
+                    }
+                    sizeCount++;
+                }
+                query.append(")");
             }
-            query.append(")");
         } else {
             // 上記以外
             query.append(this.getColumn());
             query.append(" ");
             query.append(this.getCondition());
             query.append(" ");
-            query.append(this.getCompared().toString());
+            if (this.getCompared() != null) {
+                query.append(this.getCompared());
+            } else {
+                query.append("''");
+            }
         }
         return query.toString();
     }

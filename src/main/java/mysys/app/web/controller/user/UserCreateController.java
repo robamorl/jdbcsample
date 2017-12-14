@@ -38,12 +38,12 @@ public class UserCreateController {
      *
      * edit
      *
-     * @param model
+     * @param sessionStatus
      * @return
      */
     @RequestMapping(path = "/create", method = GET)
-    public  String redirectToEntryForm(Model model) {
-        model.addAttribute("editUser", new UserForm());
+    public  String redirectToEntryForm(SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
         return "redirect:enter";
     }
 
@@ -51,10 +51,12 @@ public class UserCreateController {
      *
      * enter
      *
+     * @param model
      * @return
      */
     @RequestMapping(path = "/enter", method = GET)
-    public String showEntryForm() {
+    public String showEntryForm(Model model) {
+        ProjectCommonUtil.addModelAttribute(model, "editUser", new UserForm());
         return "user/create/enter";
     }
 

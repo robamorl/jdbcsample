@@ -74,7 +74,11 @@ public class CommonDao {
             query.append("AND ");
             query.append(this.getCondition(conditions));
         }
-        return query.toString();
+        String queryToStr = query.toString();
+        if (queryToStr.endsWith("AND ")) {
+            queryToStr = queryToStr.substring(0, queryToStr.length() - 4);
+        }
+        return queryToStr;
     }
 
 

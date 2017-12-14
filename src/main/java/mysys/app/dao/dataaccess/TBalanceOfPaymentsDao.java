@@ -2,68 +2,77 @@ package mysys.app.dao.dataaccess;
 
 import java.util.List;
 
-import mysys.app.biz.domain.TEarningsAndExpensesDto;
+import mysys.app.biz.domain.TBalanceOfPaymentsDto;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
-public interface TEarningsAndExpensesDao {
+public interface TBalanceOfPaymentsDao {
     /**
     *
     * 主キーによる検索メソッド
     *
     * @param earningsAndExpensesId PK
-    * @return TEarningsAndExpensesDto
+    * @return TBalanceOfPaymentsDto
     * @throws DataAccessException
     * @throws IncorrectResultSizeDataAccessException
     */
-    public TEarningsAndExpensesDto find(Long earningsAndExpensesId) throws DataAccessException, IncorrectResultSizeDataAccessException;
+    public TBalanceOfPaymentsDto find(Long earningsAndExpensesId) throws DataAccessException, IncorrectResultSizeDataAccessException;
 
     /**
      *
-     * アカウントIDに紐づくTEarningsAndExpensesの検索
+     * アカウントIDに紐づくTBalanceOfPaymentsの検索
      *
      * @param accountId アカウントID
-     * @return List<TEarningsAndExpensesDto>
+     * @return List<TBalanceOfPaymentsDto>
      */
-    public List<TEarningsAndExpensesDto> findAllByAccountId(Long accountId);
+    public List<TBalanceOfPaymentsDto> findAllByAccountId(Long accountId);
+
+   /**
+    *
+    * アカウントID群に紐づくTBalanceOfPaymentsの検索
+    *
+    * @param accountIds アカウントIDのリスト
+    * @return List<TBalanceOfPaymentsDto>
+    */
+    public List<TBalanceOfPaymentsDto> findAllByAccountIds(List<Long> accountIds);
 
     /**
     *
     * 主キーによる検索メソッド(削除済含む)
     *
     * @param earningsAndExpensesId PK
-    * @return TEarningsAndExpensesDto
+    * @return TBalanceOfPaymentsDto
     * @throws DataAccessException
     * @throws IncorrectResultSizeDataAccessException
     */
-    public TEarningsAndExpensesDto findWithContainsDeleteRec(Long earningsAndExpensesId) throws DataAccessException,
+    public TBalanceOfPaymentsDto findWithContainsDeleteRec(Long earningsAndExpensesId) throws DataAccessException,
             IncorrectResultSizeDataAccessException;
 
     /**
      *
      * 全件検索メソッド
      *
-     * @return List<TEarningsAndExpensesDto>
+     * @return List<TBalanceOfPaymentsDto>
      */
-    public List<TEarningsAndExpensesDto> findAll();
+    public List<TBalanceOfPaymentsDto> findAll();
 
     /**
      *
      * 挿入メソッド
      *
-     * @param earningsAndExpenses TEarningsAndExpensesDto
+     * @param earningsAndExpenses TBalanceOfPaymentsDto
      */
-    public void insert(TEarningsAndExpensesDto earningsAndExpenses);
+    public void insert(TBalanceOfPaymentsDto earningsAndExpenses);
 
     /**
      *
      * 更新メソッド
      *
-     * @param earningsAndExpenses TEarningsAndExpensesDto
+     * @param earningsAndExpenses TBalanceOfPaymentsDto
      * @throws DataAccessException
      */
-    public void update(TEarningsAndExpensesDto earningsAndExpenses) throws DataAccessException;
+    public void update(TBalanceOfPaymentsDto earningsAndExpenses) throws DataAccessException;
 
     /**
      *

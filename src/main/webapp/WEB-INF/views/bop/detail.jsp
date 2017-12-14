@@ -5,12 +5,12 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ユーザ詳細画面</title>
+<title>収支詳細画面</title>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/common.css" />">
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
-	<h1>ユーザ詳細画面</h1>
+	<h1>収支詳細画面</h1>
 	<dl>
 		<dt>ユーザコード</dt>
 		<dd>

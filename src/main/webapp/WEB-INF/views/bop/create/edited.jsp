@@ -5,15 +5,13 @@
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>更新完了</title>
+<title>登録完了</title>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/common.css" />">
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
 	<h1>登録完了</h1>
 	<b style="color: #FF0000;"><c:out value="${message}" /></b>
-	<input type="hidden" name="${editAccount.accountId}" />
-	<input type="hidden" name="${editAccount.userId}" />
 	<dl>
 		<dt>口座名</dt>
 		<dd>

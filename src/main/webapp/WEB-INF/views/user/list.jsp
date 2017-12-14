@@ -6,11 +6,19 @@
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ユーザ一覧画面</title>
+<link rel="stylesheet" type="text/css"
+	href="<c:url value="/resources/css/common.css" />">
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
 	<h1>ユーザ一覧画面</h1>
-	<b style="color:#FF0000;"><c:out value="${message}" /></b>
+	<b style="color: #FF0000;"><c:out value="${message}" /></b>
+	<BR>
+	<c:url value="/user/list/create" var="url" />
+	<button onclick="location.href='${url}'">登録</button>
+	&nbsp;&nbsp;
+	<c:url value="/" var="url" />
+	<button onclick="location.href='${url}'">戻る</button>
 	<TABLE border="1">
 		<TR>
 			<TH>コード</TH>
@@ -44,10 +52,5 @@
 			</TR>
 		</c:forEach>
 	</TABLE>
-	<c:url value="/user/list/create" var="url" />
-	<button onclick="location.href='${url}'">登録</button>
-	&nbsp;&nbsp;
-	<c:url value="/" var="url" />
-	<button onclick="location.href='${url}'">戻る</button>
 </BODY>
 </HTML>

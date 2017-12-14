@@ -52,6 +52,46 @@ public class ProjectCommonUtil {
 
     /**
      *
+     * 引数がnull/blankか判定する。
+     *
+     * @param arg 検査するObject
+     * @return true:null/blank / false:null/balnkでない
+     */
+    public static final boolean isBlank(Object arg) {
+        if (arg == null) {
+            return true;
+        }
+
+        return arg.toString().length() == 0;
+    }
+
+    /**
+     *
+     * 引数がnull/blankでないか判定する。
+     *
+     * @param arg 検査するObject
+     * @return true:null/blankでない / false:null/balnk
+     */
+    public static final boolean isNotBlank(Object arg) {
+        return !isBlank(arg);
+    }
+
+    /**
+     *
+     * モデルアトリビュートにparamStringが存在しない場合のみ、paramObjectを設定します。
+     *
+     * @param model {@link Model}
+     * @param paramString 設定する名前
+     * @param paramObject 設定するObject
+     */
+    public static final void addModelAttribute(Model model, String paramString, Object paramObject) {
+        if (!model.containsAttribute(paramString)) {
+            model.addAttribute(paramString, paramObject);
+        }
+    }
+
+    /**
+     *
      * 引数のメッセージをモデルアトリビュートへセットします
      *
      * @param model {@link Mode}
@@ -93,4 +133,15 @@ public class ProjectCommonUtil {
     public static final void addDeleteDoneMessage(Model model) {
         addMessage(model, "正常に削除が完了しました。");
     }
+
+    /**
+    *
+    * 引数のメッセージをモデルアトリビュートへセットします。
+    *
+    * @param model {@link Model}
+    * @param message メッセージ
+    */
+   public static final void addGeneralMessage(Model model, String message) {
+       addMessage(model, message);
+   }
 }

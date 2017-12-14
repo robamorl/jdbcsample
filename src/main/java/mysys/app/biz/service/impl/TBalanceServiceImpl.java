@@ -106,7 +106,7 @@ public class TBalanceServiceImpl implements TBalanceService {
             balanceDao.logicalDelete(accountId);
             return balanceDao.findWithContainsDeleteRec(accountId);
         } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("口座が見つかりませんでした。");
+            throw new DataNotFoundException("口座に紐づく残高が見つかりませんでした。");
         }
     }
 

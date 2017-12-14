@@ -1,0 +1,36 @@
+.form-horizontal input {
+	display: block;
+	float: left;
+}
+
+.form-horizontal label {
+	display: block;
+	float: left;
+	text-align: right;
+	float: left;
+}
+
+.form-horizontal br {
+	clear: left;
+}
+
+.error-label {
+	color: #b94a48;
+}
+
+.error-input {
+	border-color: #b94a48;
+	background-color: fde9f3;
+	margin-left: 5px;
+}
+
+.error-message {
+	color: #b94a48;
+	display: block;
+	padding-left: 5px;
+	overflow-x: auto;
+}
+
+.imeDisabled {
+	ime-mode:disabled;
+}

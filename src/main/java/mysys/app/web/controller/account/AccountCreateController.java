@@ -25,25 +25,30 @@ import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
 @RequestMapping("/account/list")
-@SessionAttributes(value = "editAccount")
+@SessionAttributes(value = {"editAccount", "accountKubunList"})
 public class AccountCreateController {
 
     @Autowired
     MAccountService mAccountService;
+    @Autowired
+    AccountValidator accountValidator;
 
-    @InitBinder
+    @InitBinder("editAccount")
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        binder.addValidators(accountValidator);
     }
 
     /**
      *
      * 登録画面遷移
      *
+     *@param sessionStatus {@link SessionStatus}
      * @return URI
      */
     @RequestMapping(path = "/create", method = GET)
-    public String redirectToEntryForm() {
+    public String redirectToEntryForm(SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
         return "redirect:enter";
     }
 
@@ -56,7 +61,7 @@ public class AccountCreateController {
      */
     @RequestMapping(path = "/enter", method = GET)
     public String showEntryForm(Model model) {
-        model.addAttribute("editAccount", new AccountForm());
+        ProjectCommonUtil.addModelAttribute(model, "editAccount", new AccountForm());
         // 口座区分をセット
         model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
         return "account/create/enter";
@@ -73,12 +78,8 @@ public class AccountCreateController {
      */
     @RequestMapping(path = "/enter", params = "_event_proceed", method = POST)
     public String verify(@Valid @ModelAttribute("editAccount") AccountForm accountForm, Errors errors, Model model) {
-        // Validate
-        this.validateForRegister(accountForm, errors);
         if (errors.hasErrors()) {
-            // 口座区分をセット
-            model.addAttribute("accountKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
-            return "account/create/enter";
+            return "account/edit/enter";
         }
         // 問題なければ選択された区分値を元に区分名をセット
         accountForm.setAccountKubunMei(KubunUtil.getKubunMei(AccountKubun.ACCOUNT_KUBUN_LIST,
@@ -147,23 +148,5 @@ public class AccountCreateController {
         sessionStatus.setComplete();
         ProjectCommonUtil.addInsertDoneMessage(model);
         return "account/create/edited";
-    }
-
-    /**
-     *
-     * 登録時のValidate
-     *
-     * @param accountForm {@link AccountForm}
-     * @param errors {@link Errors}
-     */
-    private void validateForRegister(AccountForm accountForm, Errors errors) {
-        /* === 同じ口座番号が存在していないか === */
-        try {
-            mAccountService.execFindByAccountNumber(accountForm.getAccountNumber());
-            // 存在していたらエラー
-            errors.rejectValue("accountNumber", "exists.true");
-        } catch (DataNotFoundException e) {
-            // 存在していなければOK
-        }
     }
 }

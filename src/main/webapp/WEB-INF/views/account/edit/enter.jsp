@@ -6,6 +6,7 @@
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>入力画面</title>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/common.css" />">
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
@@ -16,18 +17,18 @@
 		<dl>
 			<dt>口座名</dt>
 			<dd>
-				<form:input path="accountName" />
-				<form:errors path="accountName" />
+				<form:input cssErrorClass="error-input" path="accountName"  maxlength="30"/>
+				<form:errors cssClass="error-message" path="accountName" />
 			<dt>口座番号</dt>
 			<dd>
-				<form:input path="accountNumber" />
-				<form:errors path="accountNumber" />
+				<form:input cssErrorClass="error-input"  cssClass="imeDisabled" path="accountNumber" maxlength="16"/>
+				<form:errors cssClass="error-message" path="accountNumber" />
 			</dd>
 			<dt>口座区分</dt>
 			<dd>
 				<form:select path="accountKubun" items="${accountKubunList}"
 					itemLabel="label" itemValue="value" />
-				<form:errors path="accountKubun" />
+				<form:errors cssClass="error-message" path="accountKubun" />
 			</dd>
 		</dl>
 		<button type="submit" name="_event_proceed" value="proceed">

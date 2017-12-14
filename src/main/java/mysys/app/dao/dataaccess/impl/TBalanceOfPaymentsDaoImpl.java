@@ -5,10 +5,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import mysys.app.biz.domain.TEarningsAndExpensesDto;
+import mysys.app.biz.domain.TBalanceOfPaymentsDto;
 import mysys.app.dao.common.SqlColumn;
 import mysys.app.dao.common.SqlCondition;
-import mysys.app.dao.dataaccess.TEarningsAndExpensesDao;
+import mysys.app.dao.dataaccess.TBalanceOfPaymentsDao;
 import mysys.app.dao.dataaccess.common.CommonDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsAndExpensesDao {
+public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPaymentsDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -30,20 +30,23 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     /** TABLE_NAME */
-    private String TABLE_NAME = "SPRING_DEV.T_EARNINGS_AND_EXPENSES";
+    private String TABLE_NAME = "SPRING_DEV.T_BALANCE_OF_PAYMENTS";
 
     /** SQL COLUMN */
-    private SqlColumn EARNINGS_AND_EXPENSES_ID = new SqlColumn("EARNINGS_AND_EXPENSES_ID", "earningsAndExpensesId");
-    private SqlColumn ACCOUNT_ID = new SqlColumn("ACCOUNT_ID", "earningsAndExpensesId");
-    private SqlColumn EARNINGS_AND_EXPENSES_KUBUN = new SqlColumn("EARNINGS_AND_EXPENSES_KUBUN", "earningsAndExpensesKubun");
+    private SqlColumn BALANCE_OF_PAYMENTS_ID = new SqlColumn("BALANCE_OF_PAYMENTS_ID", "balanceOfPaymentsId");
+    private SqlColumn ACCOUNT_ID = new SqlColumn("ACCOUNT_ID", "accountId");
+    private SqlColumn BALANCE_OF_PAYMENTS_KUBUN = new SqlColumn("BALANCE_OF_PAYMENTS_KUBUN", "balanceOfPaymentsKubun");
+    private SqlColumn EXPENSES_KUBUN = new SqlColumn("EXPENSES_KUBUN", "expensesKubun");
     private SqlColumn AMOUNT = new SqlColumn("AMOUNT", "amount");
     private SqlColumn TRANSACTION_DATE = new SqlColumn("TRANSACTION_DATE", "transactionDate");
 
 
+
     private List<SqlColumn> COLUMNS = Arrays.asList(new SqlColumn[] {
-            EARNINGS_AND_EXPENSES_ID,
+            BALANCE_OF_PAYMENTS_ID,
             ACCOUNT_ID,
-            EARNINGS_AND_EXPENSES_KUBUN,
+            BALANCE_OF_PAYMENTS_KUBUN,
+            EXPENSES_KUBUN,
             AMOUNT,
             TRANSACTION_DATE,
             ENTRY_DATE,
@@ -56,12 +59,12 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     /**
      * {@inheritDoc}
      */
-    public TEarningsAndExpensesDto find(Long earningsAndExpensesId) throws EmptyResultDataAccessException,
+    public TBalanceOfPaymentsDto find(Long earningsAndExpensesId) throws EmptyResultDataAccessException,
             IncorrectResultSizeDataAccessException {
         SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, earningsAndExpensesId);
         try {
             return jdbcTemplate
-                    .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new TEarningsAndExpensesMapper());
+                    .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new TBalanceOfPaymentsMapper());
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         } catch (IncorrectResultSizeDataAccessException e2) {
@@ -72,13 +75,27 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     /**
      * {@inheritDoc}
      */
-    public TEarningsAndExpensesDto findWithContainsDeleteRec(Long earningsAndExpensesId) throws EmptyResultDataAccessException,
+    public List<TBalanceOfPaymentsDto> findAllByAccountIds(List<Long> accountIds) {
+        SqlCondition condition = new SqlCondition(ACCOUNT_ID.getColumnName(), SqlCondition.IN, accountIds);
+        try {
+            return jdbcTemplate.query(super.getSelectQueryByCondition(TABLE_NAME, condition), new TBalanceOfPaymentsMapper());
+        } catch (EmptyResultDataAccessException e1) {
+            throw e1;
+        } catch (IncorrectResultSizeDataAccessException e2) {
+            throw e2;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public TBalanceOfPaymentsDto findWithContainsDeleteRec(Long earningsAndExpensesId) throws EmptyResultDataAccessException,
             IncorrectResultSizeDataAccessException {
         SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, earningsAndExpensesId);
         try {
             return jdbcTemplate
                     .queryForObject(super.getSelectQueryByConditionWithContainsDeletedRecord(TABLE_NAME, condition),
-                            new TEarningsAndExpensesMapper());
+                            new TBalanceOfPaymentsMapper());
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         } catch (IncorrectResultSizeDataAccessException e2) {
@@ -89,10 +106,10 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     /**
      * {@inheritDoc}
      */
-    public List<TEarningsAndExpensesDto> findAllByAccountId(Long accountId) {
+    public List<TBalanceOfPaymentsDto> findAllByAccountId(Long accountId) {
         SqlCondition condition = new SqlCondition(ACCOUNT_ID.getColumnName(), SqlCondition.EQ, accountId);
         try {
-            return jdbcTemplate.query(super.getSelectQueryByCondition(TABLE_NAME, condition), new TEarningsAndExpensesMapper());
+            return jdbcTemplate.query(super.getSelectQueryByCondition(TABLE_NAME, condition), new TBalanceOfPaymentsMapper());
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         } catch (IncorrectResultSizeDataAccessException e2) {
@@ -103,9 +120,9 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     /**
      * {@inheritDoc}
      */
-    public List<TEarningsAndExpensesDto> findAll() {
+    public List<TBalanceOfPaymentsDto> findAll() {
         try {
-            return jdbcTemplate.query(super.getSelectQueryByAll(TABLE_NAME), new TEarningsAndExpensesMapper());
+            return jdbcTemplate.query(super.getSelectQueryByAll(TABLE_NAME), new TBalanceOfPaymentsMapper());
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         }
@@ -114,8 +131,8 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     /**
      * {@inheritDoc}
      */
-    public void insert(TEarningsAndExpensesDto earningsAndExpenses) {
-        earningsAndExpenses.setEarningsAndExpensesId(this.getPkByNextVal());
+    public void insert(TBalanceOfPaymentsDto earningsAndExpenses) {
+        earningsAndExpenses.setBalanceOfPaymentsId(this.getPkByNextVal());
         earningsAndExpenses.setEntryData();
         namedParameterJdbcTemplate.update(super.getInsertQuery(TABLE_NAME, COLUMNS),
                 new BeanPropertySqlParameterSource(earningsAndExpenses));
@@ -124,7 +141,7 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     /**
      * {@inheritDoc}
      */
-    public void update(TEarningsAndExpensesDto earningsAndExpenses) throws EmptyResultDataAccessException {
+    public void update(TBalanceOfPaymentsDto earningsAndExpenses) throws EmptyResultDataAccessException {
         super.copyLogData(this.find(earningsAndExpenses.getAccountId()), earningsAndExpenses);
         earningsAndExpenses.setUpdateData();
         try {
@@ -141,7 +158,7 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
     public void delete(Long earningsAndExpensesId) throws EmptyResultDataAccessException {
         try {
             namedParameterJdbcTemplate.update(super.getDeleteQuery(TABLE_NAME, COLUMNS, earningsAndExpensesId),
-                    new BeanPropertySqlParameterSource(new TEarningsAndExpensesDto()));
+                    new BeanPropertySqlParameterSource(new TBalanceOfPaymentsDto()));
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         }
@@ -151,7 +168,7 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
      * {@inheritDoc}
      */
     public void logicalDelete(Long earningsAndExpensesId) throws EmptyResultDataAccessException {
-        TEarningsAndExpensesDto earningsAndExpenses = this.find(earningsAndExpensesId);
+        TBalanceOfPaymentsDto earningsAndExpenses = this.find(earningsAndExpensesId);
         earningsAndExpenses.setDeleteFlg(Boolean.TRUE);
         this.update(earningsAndExpenses);
     }
@@ -163,12 +180,13 @@ public class TEarningsAndExpensesDaoImpl extends CommonDao implements TEarningsA
         return jdbcTemplate.queryForObject(super.getSequenceSelectQuery(ACCOUNT_ID), Long.class);
     }
 
-    class TEarningsAndExpensesMapper implements RowMapper<TEarningsAndExpensesDto> {
-        public TEarningsAndExpensesDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-            TEarningsAndExpensesDto earningsAndExpenses = new TEarningsAndExpensesDto();
-            earningsAndExpenses.setEarningsAndExpensesId(rs.getLong(EARNINGS_AND_EXPENSES_ID.getColumnName()));
+    class TBalanceOfPaymentsMapper implements RowMapper<TBalanceOfPaymentsDto> {
+        public TBalanceOfPaymentsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            TBalanceOfPaymentsDto earningsAndExpenses = new TBalanceOfPaymentsDto();
+            earningsAndExpenses.setBalanceOfPaymentsId(rs.getLong(BALANCE_OF_PAYMENTS_ID.getColumnName()));
             earningsAndExpenses.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
-            earningsAndExpenses.setEarningsAndExpensesKubun(rs.getString(EARNINGS_AND_EXPENSES_KUBUN.getColumnName()));
+            earningsAndExpenses.setBalanceOfPaymentsKubun(rs.getString(BALANCE_OF_PAYMENTS_KUBUN.getColumnName()));
+            earningsAndExpenses.setExpensesKubun(rs.getString(EXPENSES_KUBUN.getColumnName()));
             earningsAndExpenses.setAmount(rs.getBigDecimal(AMOUNT.getColumnName()));
             earningsAndExpenses.setTransactionDate(rs.getDate(TRANSACTION_DATE.getColumnName()));
             earningsAndExpenses.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));

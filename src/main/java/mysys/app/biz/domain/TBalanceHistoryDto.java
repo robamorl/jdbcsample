@@ -34,7 +34,7 @@ public class TBalanceHistoryDto extends CommonDomain implements Serializable {
     private Long latestBalanceHistoryId;
 
     /** EARNINGS_AND_EXPENSES_ID*/
-    private Long earningsAndExpensesId;
+    private Long balanceOfPaymentsId;
 
     /**
      *
@@ -85,10 +85,10 @@ public class TBalanceHistoryDto extends CommonDomain implements Serializable {
     }
 
     /**
-     * @return earningsAndExpensesId
+     * @return balanceOfPaymentsId
      */
-    public final Long getEarningsAndExpensesId() {
-        return earningsAndExpensesId;
+    public final Long getBalanceOfPaymentsId() {
+        return balanceOfPaymentsId;
     }
 
     /**
@@ -120,10 +120,10 @@ public class TBalanceHistoryDto extends CommonDomain implements Serializable {
     }
 
     /**
-     * @param earningsAndExpensesId セットする earningsAndExpensesId
+     * @param balanceOfPaymentsId セットする balanceOfPaymentsId
      */
-    public final void setEarningsAndExpensesId(Long earningsAndExpensesId) {
-        this.earningsAndExpensesId = earningsAndExpensesId;
+    public final void setBalanceOfPaymentsId(Long balanceOfPaymentsId) {
+        this.balanceOfPaymentsId = balanceOfPaymentsId;
     }
 
 

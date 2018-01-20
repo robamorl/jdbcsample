@@ -10,7 +10,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
-	<h1>登録完了</h1>
+	<h1 id=header>登録完了</h1>
 	<b style="color: #FF0000;"><c:out value="${message}" /></b>
 	<input type="hidden" name="${editAccount.accountId}" />
 	<input type="hidden" name="${editAccount.userId}" />

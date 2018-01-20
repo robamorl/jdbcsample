@@ -11,7 +11,7 @@
 </HEAD>
 <BODY>
     <jsp:include page="../../header/login_info.jsp"/>
-	<h1>入力画面</h1>
+	<h1 id=header>入力画面</h1>
 	<form:form modelAttribute="editUser">
 		<dl>
 			<dt>ユーザコード</dt>

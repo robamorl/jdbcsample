@@ -9,7 +9,7 @@
 </HEAD>
 <BODY>
     <jsp:include page="../header/login_info.jsp"/>
-	<h1>アクセス拒否</h1>
+	<h1 id=header>アクセス拒否</h1>
 	アクセスが拒否されました。
 	<BR><BR>
 	<c:url value="/top" var="url" />

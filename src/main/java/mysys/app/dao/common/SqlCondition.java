@@ -39,7 +39,9 @@ public class SqlCondition {
                 query.append(" (");
                 int sizeCount = 1;
                 for (Object comparedElm : this.getComparedList()) {
+                    query.append("'");
                     query.append(comparedElm.toString());
+                    query.append("'");
                     if (sizeCount < this.getComparedList().size()) {
                         query.append(",");
                     }
@@ -53,11 +55,9 @@ public class SqlCondition {
             query.append(" ");
             query.append(this.getCondition());
             query.append(" ");
-            if (this.getCompared() != null) {
-                query.append(this.getCompared());
-            } else {
-                query.append("''");
-            }
+            query.append("'");
+            query.append(this.getCompared());
+            query.append("'");
         }
         return query.toString();
     }

@@ -21,6 +21,16 @@ public interface MUserService {
 
     /**
      *
+     * ユーザコードによる検索
+     *
+     * @param userCode ユーザコード
+     * @return 検索結果
+     * @throws DataNotFoundException
+     */
+    public MUserDto execFindByUserCode(String userCode) throws DataNotFoundException;
+
+    /**
+     *
      * 全件検索
      *
      * @return 検索結果

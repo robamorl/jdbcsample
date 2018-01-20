@@ -29,9 +29,9 @@ import org.springframework.web.bind.support.SessionStatus;
 public class AccountCreateController {
 
     @Autowired
-    MAccountService mAccountService;
+    private MAccountService mAccountService;
     @Autowired
-    AccountValidator accountValidator;
+    private AccountValidator accountValidator;
 
     @InitBinder("editAccount")
     public void initBinder(WebDataBinder binder) {

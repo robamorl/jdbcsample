@@ -7,7 +7,9 @@ import java.util.List;
 
 import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.MAccountDto;
+import mysys.app.biz.domain.TBalanceDto;
 import mysys.app.biz.service.MAccountService;
+import mysys.app.biz.service.TBalanceService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 import mysys.app.biz.service.exception.SystemException;
 import mysys.app.web.form.AccountForm;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AccountListController {
 
     @Autowired
-    private MAccountService mAccountService;
+    private MAccountService accountService;
+    @Autowired
+    private TBalanceService balanceService;
 
     /**
      *
@@ -41,7 +45,7 @@ public class AccountListController {
         ProjectCommonUtil.addMessage(model, message);
         List<MAccountDto> accountList = null;
         try {
-            accountList = mAccountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
+            accountList = accountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
         } catch (DataNotFoundException e) {
             accountList = new ArrayList<MAccountDto>();
         }
@@ -50,7 +54,13 @@ public class AccountListController {
         List<AccountForm> formList = new ArrayList<AccountForm>();
         for (MAccountDto dto : accountList) {
             AccountForm form = new AccountForm();
-            form.copyFrom(dto);
+            TBalanceDto balance;
+            try {
+                balance = balanceService.execFindByAccountId(dto.getAccountId());
+            } catch (DataNotFoundException e) {
+                throw new SystemException("想定外：口座に紐づく残高が取得できない。");
+            }
+            form.copyFrom(dto, balance.getBalance());
             formList.add(form);
         }
 
@@ -71,10 +81,11 @@ public class AccountListController {
     @RequestMapping(value = "/list/{accountId}", method = GET)
     public String showAcctountDetail(@PathVariable Long accountId, Model model)
                                         throws DataNotFoundException,SystemException{
-        MAccountDto account = mAccountService.execFind(accountId);
+        MAccountDto account = accountService.execFind(accountId);
         // Formへ詰替
         AccountForm form = new AccountForm();
-        form.copyFrom(account);
+        TBalanceDto balance = balanceService.execFindByAccountId(accountId);
+        form.copyFrom(account, balance.getBalance());
         model.addAttribute("account", form);
         return "account/detail";
     }
@@ -91,7 +102,7 @@ public class AccountListController {
     @RequestMapping(value = "/list/{accountId}/delete", method = GET)
     public String execDelete(@PathVariable Long accountId, Model model)
                                         throws DataNotFoundException{
-        mAccountService.execLogicalDelete(accountId);
+        accountService.execLogicalDelete(accountId);
         ProjectCommonUtil.addDeleteDoneMessage(model);
         return "redirect:/account/";
     }

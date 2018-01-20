@@ -11,7 +11,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
-	<h1>ユーザ一覧画面</h1>
+	<h1 id=header>ユーザ一覧画面</h1>
 	<b style="color: #FF0000;"><c:out value="${message}" /></b>
 	<BR>
 	<c:url value="/user/list/create" var="url" />
@@ -19,17 +19,17 @@
 	&nbsp;&nbsp;
 	<c:url value="/" var="url" />
 	<button onclick="location.href='${url}'">戻る</button>
-	<TABLE border="1">
+	<TABLE border="1" class="listtable" cellspacing="0">
 		<TR>
-			<TH>コード</TH>
-			<TH>パスワード</TH>
-			<TH>名前</TH>
-			<TH>Eメールアドレス</TH>
-			<TH>登録日時</TH>
-			<TH>登録者</TH>
-			<TH>更新日時</TH>
-			<TH>更新者</TH>
-			<TH></TH>
+			<TH class="listheader">コード</TH>
+			<TH class="listheader">パスワード</TH>
+			<TH class="listheader">名前</TH>
+			<TH class="listheader">Eメールアドレス</TH>
+			<TH class="listheader">登録日時</TH>
+			<TH class="listheader">登録者</TH>
+			<TH class="listheader">更新日時</TH>
+			<TH class="listheader">更新者</TH>
+			<TH class="listheader"></TH>
 		</TR>
 		<c:forEach items="${users}" var="user">
 			<TR>

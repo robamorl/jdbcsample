@@ -70,6 +70,21 @@ public class MUserDaoImpl extends CommonDao implements MUserDao {
     /**
      * {@inheritDoc}
      */
+    public MUserDto findByUserCode(String userCode) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
+        SqlCondition condition = new SqlCondition(USER_CODE.getColumnName(), SqlCondition.EQ, userCode);
+        try {
+            return jdbcTemplate
+                    .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new MUserMapper());
+        } catch (EmptyResultDataAccessException e1) {
+            throw e1;
+        } catch (IncorrectResultSizeDataAccessException e2) {
+            throw e2;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public MUserDto findWithContainsDeleteRec(Long userId) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, userId);
         try {

@@ -1,6 +1,9 @@
 package mysys.app.web.form;
 
+import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
 
 import mysys.app.biz.common.kubun.BalanceOfPaymentsKubun;
 import mysys.app.biz.common.kubun.ExpensesKubun;
@@ -9,7 +12,9 @@ import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.TBalanceOfPaymentsDto;
 import mysys.app.biz.service.exception.SystemException;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -23,23 +28,32 @@ public class BalanceOfPaymentsForm {
     /** 収支ID */
     private Long balanceOfPaymentsId;
     /** 口座ID*/
+    @NotNull
     private Long accountId;
     /** 口座名 */
     private String accountName;
     /** 口座番号表示用 */
     private String accountNumberForDisplay;
     /** 収支区分 */
+    @NotNull(message="selected.none")
     private String balanceOfPaymentsKubun;
     /** 収支区分名 */
     private String balanceOfPaymentsKubunMei;
     /** 費目区分*/
+    @NotNull(message="selected.none")
     private String expensesKubun;
     /** 費目区分名*/
     private String expensesKubunMei;
     /**  金額 */
-    private String amount;
+    @NotNull
+    @Range(min=1)
+    private BigDecimal amount;
     /** 処理日 */
+    @NotNull
+    @DateTimeFormat(pattern="yyyyMMdd")
     private Date transactionDate;
+    /** 口座残高 */
+    private BigDecimal balance;
     /** 登録日 */
     private Date entryDate;
     /** 登録者 */
@@ -56,9 +70,10 @@ public class BalanceOfPaymentsForm {
     * @param dto TBalanceOfPaymentsDto
      * @param accountName 口座名
      * @param accountNumber 口座番号
-    * @throws SystemException
+     * @param balance 残高
+     * @throws SystemException
     */
-   public void copyFrom(TBalanceOfPaymentsDto dto, String accountName, String accountNumber) throws SystemException {
+   public void copyFrom(TBalanceOfPaymentsDto dto, String accountName, String accountNumber, BigDecimal balance) throws SystemException {
        // 基本は全てコピー
        BeanUtils.copyProperties(dto, this);
        // 口座名
@@ -69,7 +84,18 @@ public class BalanceOfPaymentsForm {
        // 収支区分
        this.setBalanceOfPaymentsKubunMei(KubunUtil.getKubunMei(BalanceOfPaymentsKubun.BOP_KUBUN_LIST, this.getBalanceOfPaymentsKubun()));
        // 費目区分
-       this.setBalanceOfPaymentsKubunMei(KubunUtil.getKubunMei(ExpensesKubun.EXPENSES_KUBUN_LIST, this.getExpensesKubun()));
+       this.setExpensesKubunMei(KubunUtil.getKubunMei(ExpensesKubun.EXPENSES_KUBUN_LIST, this.getExpensesKubun()));
+       // 残高
+       this.setBalance(balance);
+   }
+
+   public TBalanceOfPaymentsDto createDto() {
+       TBalanceOfPaymentsDto dto = new TBalanceOfPaymentsDto();
+
+       // 基本は全てコピー
+       BeanUtils.copyProperties(this, dto);
+
+       return dto;
    }
 
     /**
@@ -123,13 +149,13 @@ public class BalanceOfPaymentsForm {
     /**
      * @return amount
      */
-    public final String getAmount() {
+    public final BigDecimal getAmount() {
         return amount;
     }
     /**
      * @param amount セットする amount
      */
-    public final void setAmount(String amount) {
+    public final void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
@@ -247,6 +273,20 @@ public class BalanceOfPaymentsForm {
      */
     public final void setAccountNumberForDisplay(String accountNumberForDisplay) {
         this.accountNumberForDisplay = accountNumberForDisplay;
+    }
+
+    /**
+     * @return balance
+     */
+    public final BigDecimal getBalance() {
+        return balance;
+    }
+
+    /**
+     * @param balance セットする balance
+     */
+    public final void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
 }

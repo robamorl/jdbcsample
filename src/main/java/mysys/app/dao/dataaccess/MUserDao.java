@@ -20,6 +20,17 @@ public interface MUserDao {
     public MUserDto find(Long userId) throws DataAccessException,IncorrectResultSizeDataAccessException;
 
     /**
+     *
+     * ユーザコードによる検索メソッド
+     *
+     * @param userCode ユーザコード
+     * @return MUserDto
+     * @throws DataAccessException
+     * @throws IncorrectResultSizeDataAccessException
+     */
+    public MUserDto findByUserCode(String userCode) throws DataAccessException,IncorrectResultSizeDataAccessException;
+
+    /**
     *
     * 主キーによる検索メソッド(削除済含む)
     *

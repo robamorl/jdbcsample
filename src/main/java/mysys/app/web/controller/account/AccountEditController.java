@@ -31,9 +31,9 @@ import org.springframework.web.bind.support.SessionStatus;
 public class AccountEditController {
 
     @Autowired
-    MAccountService mAccountService;
+    private MAccountService mAccountService;
     @Autowired
-    AccountValidator accountValidator;
+    private AccountValidator accountValidator;
 
     @InitBinder("editAccount")
     public void initBinder(WebDataBinder binder) {
@@ -54,7 +54,7 @@ public class AccountEditController {
     @RequestMapping(path = "/edit", method = GET)
     public  String redirectToEntryForm(@PathVariable Long accountId, Model model) throws DataNotFoundException, SystemException {
         AccountForm accountForm = new AccountForm();
-        accountForm.copyFrom(mAccountService.execFind(accountId));
+        accountForm.copyFrom(mAccountService.execFind(accountId), null);
         model.addAttribute("editAccount", accountForm);
         return "redirect:enter";
     }

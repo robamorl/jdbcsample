@@ -10,7 +10,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
-	<h1>ユーザ詳細画面</h1>
+	<h1 id=header>ユーザ詳細画面</h1>
 	<dl>
 		<dt>ユーザコード</dt>
 		<dd>

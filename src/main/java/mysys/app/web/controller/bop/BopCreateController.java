@@ -2,22 +2,24 @@ package mysys.app.web.controller.bop;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import mysys.app.biz.common.kubun.AccountKubun;
 import mysys.app.biz.common.kubun.BalanceOfPaymentsKubun;
 import mysys.app.biz.common.kubun.ExpensesKubun;
 import mysys.app.biz.common.kubun.stationery.Kubun;
 import mysys.app.biz.common.util.KubunUtil;
 import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.MAccountDto;
+import mysys.app.biz.domain.TBalanceDto;
 import mysys.app.biz.service.MAccountService;
 import mysys.app.biz.service.TBalanceOfPaymentsService;
+import mysys.app.biz.service.TBalanceService;
 import mysys.app.biz.service.exception.DataNotFoundException;
-import mysys.app.web.form.AccountForm;
+import mysys.app.biz.service.exception.SystemException;
 import mysys.app.web.form.BalanceOfPaymentsForm;
 import mysys.security.util.LoginUserUtil;
 
@@ -39,23 +41,30 @@ import org.springframework.web.bind.support.SessionStatus;
 public class BopCreateController {
 
     @Autowired
-    private TBalanceOfPaymentsService tBalanceOfPaymentsService;
+    private TBalanceOfPaymentsService bopService;
     @Autowired
-    private MAccountService mAccountService;
+    private MAccountService accountService;
+    @Autowired
+    private TBalanceService balanceService;
+    @Autowired
+    private BopValidator validator;
 
-    @InitBinder
+    @InitBinder("editBop")
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        binder.addValidators(validator);
     }
 
     /**
      *
      * 登録画面遷移
      *
+     *@param sessionStatus {@link SessionStatus}
      * @return URI
      */
     @RequestMapping(path = "/create", method = GET)
-    public String redirectToEntryForm() {
+    public String redirectToEntryForm(SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
         return "redirect:enter";
     }
 
@@ -69,10 +78,12 @@ public class BopCreateController {
     @RequestMapping(path = "/enter", method = GET)
     public String showEntryForm(Model model) {
         ProjectCommonUtil.addModelAttribute(model, "editBop", new BalanceOfPaymentsForm());
+        // ----------------------------------------------------------------------
+        // 基本情報のセット
         // ユーザに紐づく口座を取得
         List<MAccountDto> accountList;
         try {
-            accountList = mAccountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
+            accountList = accountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
         } catch (DataNotFoundException e) {
             ProjectCommonUtil.addGeneralMessage(model, "口座が登録されていません。");
             return "bop/list";
@@ -90,6 +101,7 @@ public class BopCreateController {
         model.addAttribute("bopKubunList", BalanceOfPaymentsKubun.BOP_KUBUN_LIST);
         // 費目区分をセット
         model.addAttribute("expensesKubunList", ExpensesKubun.EXPENSES_KUBUN_LIST);
+
         return "bop/create/enter";
     }
 
@@ -97,23 +109,58 @@ public class BopCreateController {
      *
      * 登録画面 登録イベント
      *
-     * @param bopForm {@link AccountForm}
+     * @param bopForm {@link BalanceOfPaymentsForm}
      * @param errors {@link Errors}
      * @param model {@link Model}
      * @return URI
+     * @throws SystemException
      */
     @RequestMapping(path = "/enter", params = "_event_proceed", method = POST)
-    public String verify(@Valid @ModelAttribute("editBop") AccountForm bopForm, Errors errors, Model model) {
-        // Validate
-        this.validateForRegister(bopForm, errors);
+    public String verify(@Valid @ModelAttribute("editBop") BalanceOfPaymentsForm bopForm, Errors errors, Model model) throws SystemException {
         if (errors.hasErrors()) {
-            // 口座区分をセット
-            model.addAttribute("bopKubunList", AccountKubun.ACCOUNT_KUBUN_LIST);
             return "bop/create/enter";
         }
+
+        // ----------------------------------------------------------------------
         // 問題なければ選択された区分値を元に区分名をセット
-        bopForm.setAccountKubunMei(KubunUtil.getKubunMei(AccountKubun.ACCOUNT_KUBUN_LIST,
-                bopForm.getAccountKubun()));
+        // 収支
+        bopForm.setBalanceOfPaymentsKubunMei(KubunUtil.getKubunMei(BalanceOfPaymentsKubun.BOP_KUBUN_LIST,
+                bopForm.getBalanceOfPaymentsKubun()));
+
+        // 費目
+        bopForm.setExpensesKubunMei(KubunUtil.getKubunMei(ExpensesKubun.EXPENSES_KUBUN_LIST, bopForm.getExpensesKubun()));
+
+        // 口座名・口座番号
+        MAccountDto accountDto;
+        try {
+            accountDto = accountService.execFind(bopForm.getAccountId());
+        } catch (DataNotFoundException e) {
+            throw new SystemException("想定外：口座IDに紐づく口座が見つからない。"
+                                                      + " 口座ID:" + bopForm.getAccountId());
+        }
+        bopForm.setAccountNumberForDisplay(ProjectCommonUtil.getAccountNumberForDisplay(accountDto.getAccountNumber()));
+        bopForm.setAccountName(accountDto.getAccountName());
+
+        // 残高
+        TBalanceDto balanceDto;
+        try {
+            balanceDto = balanceService.execFindByAccountId(accountDto.getAccountId());
+        } catch (DataNotFoundException e) {
+            // 存在しない場合エラー
+            throw new SystemException("想定外：口座IDに紐づく残高が見つからない。"
+                                                       + " 口座ID:" + bopForm.getAccountId());
+        }
+        // 収支区分によって残高を計算
+        BigDecimal balance = BigDecimal.ZERO;
+        if (BalanceOfPaymentsKubun.BOP_KUBUN_EXPENSE.equals(bopForm.getBalanceOfPaymentsKubun())) {
+            // 支出の場合
+            balance = balanceDto.getBalance().subtract(bopForm.getAmount());
+        } else if (BalanceOfPaymentsKubun.BOP_KUBUN_INCOME.equals(bopForm.getBalanceOfPaymentsKubun())) {
+            // 収入の場合
+            balance = balanceDto.getBalance().add(bopForm.getAmount());
+        }
+        bopForm.setBalance(balance);
+
         return "redirect:review";
     }
 
@@ -159,9 +206,9 @@ public class BopCreateController {
      * @throws DataNotFoundException
      */
     @RequestMapping(path = "/review", params = "_event_confirmed", method = POST)
-    public String execRegister(@ModelAttribute("editBop") AccountForm bopForm) throws DataNotFoundException {
+    public String execRegister(@ModelAttribute("editBop") BalanceOfPaymentsForm bopForm) throws DataNotFoundException {
         // 口座の登録
-        mAccountService.execInsert(bopForm.createDto()).getAccountId();
+        bopService.execInsert(bopForm.createDto());
         return "redirect:created";
     }
 
@@ -178,23 +225,5 @@ public class BopCreateController {
         sessionStatus.setComplete();
         ProjectCommonUtil.addInsertDoneMessage(model);
         return "bop/create/edited";
-    }
-
-    /**
-     *
-     * 登録時のValidate
-     *
-     * @param bopForm {@link AccountForm}
-     * @param errors {@link Errors}
-     */
-    private void validateForRegister(AccountForm bopForm, Errors errors) {
-        /* === 同じ口座番号が存在していないか === */
-        try {
-            mAccountService.execFindByAccountNumber(bopForm.getAccountNumber());
-            // 存在していたらエラー
-            errors.rejectValue("bopNumber", "exists.true");
-        } catch (DataNotFoundException e) {
-            // 存在していなければOK
-        }
     }
 }

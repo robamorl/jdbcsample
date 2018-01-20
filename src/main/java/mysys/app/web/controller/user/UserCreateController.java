@@ -27,11 +27,14 @@ import org.springframework.web.bind.support.SessionStatus;
 public class UserCreateController {
 
     @Autowired
-    MUserService mUserService;
+    private MUserService mUserService;
+    @Autowired
+    private UserValidator validator;
 
-    @InitBinder
+    @InitBinder("editUser")
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        binder.addValidators(validator);
     }
 
     /**

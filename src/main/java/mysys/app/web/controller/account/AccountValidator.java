@@ -15,7 +15,7 @@ import org.springframework.validation.Validator;
 class AccountValidator implements Validator {
 
     @Autowired
-    MAccountService mAccountService;
+    private MAccountService mAccountService;
 
     /**
      * {@inheritDoc}

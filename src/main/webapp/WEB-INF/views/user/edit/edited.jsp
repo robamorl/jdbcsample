@@ -10,7 +10,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
-	<h1>更新完了</h1>
+	<h1 id=header>更新完了</h1>
 	<b style="color:#FF0000;"><c:out value="${message}" /></b>
 	<dl>
 		<dt>ユーザコード</dt>

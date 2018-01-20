@@ -83,10 +83,11 @@ public class TBalanceDaoImpl extends CommonDao implements TBalanceDao {
     /**
      * {@inheritDoc}
      */
-    public List<TBalanceDto> findAllByAccountId(Long accountId) {
+    public TBalanceDto findByAccountId(Long accountId) {
         SqlCondition condition = new SqlCondition(ACCOUNT_ID.getColumnName(), SqlCondition.EQ, accountId);
         try {
-            return jdbcTemplate.query(super.getSelectQueryByCondition(TABLE_NAME, condition), new TBalanceMapper());
+            return jdbcTemplate
+                    .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new TBalanceMapper());
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         } catch (IncorrectResultSizeDataAccessException e2) {

@@ -1,5 +1,6 @@
 package mysys.app.biz.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import mysys.app.biz.domain.TBalanceDto;
@@ -27,7 +28,7 @@ public interface TBalanceService {
      * @return 検索結果
      * @throws DataNotFoundException
      */
-    public List<TBalanceDto> execFindAllByAccountId(Long accountId) throws DataNotFoundException;
+    public TBalanceDto execFindByAccountId(Long accountId) throws DataNotFoundException;
 
     /**
     *
@@ -48,14 +49,17 @@ public interface TBalanceService {
     public TBalanceDto execInsert(Long accountId);
 
     /**
-    *
-    * データ更新
-    *
-    * @param balance TBalanceDto
-    * @return 更新したデータが格納されたDTO
-    * @throws DataNotFoundException
-    */
-    public TBalanceDto execUpdate(TBalanceDto balance) throws DataNotFoundException;
+     *
+     * 引数の口座IDに紐づく残高を引数の金額によって更新します。
+     * 残高の金額はisIncomeがtrueの場合加算、falseの場合減算にて求めます。
+     *
+     * @param accoundId 口座ID
+     * @param amount 金額
+     * @param isIncome true:収入 / false:支出
+     * @return 更新した残高Dto
+     * @throws DataNotFoundException
+     */
+    public TBalanceDto execUpdateByAmount(Long accoundId, BigDecimal amount, boolean isIncome) throws DataNotFoundException;
 
     /**
     *

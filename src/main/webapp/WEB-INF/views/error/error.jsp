@@ -9,7 +9,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
-	<h1>想定外のエラー</h1>
+	<h1 id=header>想定外のエラー</h1>
 	想定外のエラーが発生しました。
 	<BR>お手数ですが、最初からやり直して下さい。
 	<BR><BR>

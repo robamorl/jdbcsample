@@ -33,9 +33,9 @@ public class TBalanceServiceImpl implements TBalanceService {
     /**
      * {@inheritDoc}
      */
-    public List<TBalanceDto> execFindAllByAccountId(Long accountId) throws DataNotFoundException {
+    public TBalanceDto execFindByAccountId(Long accountId) throws DataNotFoundException {
         try {
-            return balanceDao.findAllByAccountId(accountId);
+            return balanceDao.findByAccountId(accountId);
         } catch (EmptyResultDataAccessException e) {
             throw new DataNotFoundException("口座に紐づく残高が見つかりませんでした。");
         }
@@ -73,8 +73,46 @@ public class TBalanceServiceImpl implements TBalanceService {
     /**
      * {@inheritDoc}
      */
-    public TBalanceDto execUpdate(TBalanceDto balance) throws DataNotFoundException {
+    public TBalanceDto execUpdateByAmount(Long accountId, BigDecimal amount, boolean isIncome) throws DataNotFoundException {
+        TBalanceDto dto;
         try {
+            dto = balanceDao.find(accountId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DataNotFoundException("残高が見つかりませんでした。");
+        }
+        // 残高の算出
+        BigDecimal balance = dto.getBalance();
+        if (isIncome) {
+            // 収入の場合
+            balance = balance.add(amount);
+        } else {
+            // 支出の場合
+            balance = balance.subtract(amount);
+        }
+
+        // 残高を設定し更新
+        dto.setBalance(balance);
+        this.execUpdate(dto);
+
+        return dto;
+    }
+
+    /**
+    *
+    * データ更新
+    *
+    * @param balance TBalanceDto
+    * @return 更新したデータが格納されたDTO
+    * @throws DataNotFoundException
+    */
+    private TBalanceDto execUpdate(TBalanceDto balance) throws DataNotFoundException {
+        try {
+            balanceDao.update(balance);
+            // 口座履歴の登録
+            TBalanceHistoryDto history = new TBalanceHistoryDto(balance);
+            balanceHistoryDao.insert(history);
+            // 登録した口座履歴IDで口座を更新
+            balance.setLatestBalanceHistoryId(history.getBalanceHistoryId());
             balanceDao.update(balance);
             return balanceDao.find(balance.getAccountId());
         } catch (EmptyResultDataAccessException e) {

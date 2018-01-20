@@ -9,7 +9,7 @@
 </HEAD>
 <BODY>
     <jsp:include page="../header/login_info.jsp"/>
-	<h1>指定されたデータは見つかりません</h1>
+	<h1 id=header>指定されたデータは見つかりません</h1>
 	<h3>${exception.message}</h3>
 	<BR>お手数ですが、最初からやり直して下さい。<BR>
 	<c:url value="/" var="url" />

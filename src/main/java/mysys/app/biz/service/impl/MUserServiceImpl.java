@@ -27,6 +27,13 @@ public class MUserServiceImpl implements MUserService {
     /**
      * {@inheritDoc}
      */
+    public MUserDto execFindByUserCode(String userCode) throws DataNotFoundException {
+        return userDao.findByUserCode(userCode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<MUserDto> execFindAll() throws DataNotFoundException {
         try {
             return userDao.findAll();

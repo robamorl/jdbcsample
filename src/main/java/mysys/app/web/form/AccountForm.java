@@ -1,5 +1,6 @@
 package mysys.app.web.form;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -43,6 +44,8 @@ public class AccountForm {
     private String accountKubun;
     /**  口座区分名 */
     private String accountKubunMei;
+    /** 残高 */
+    private BigDecimal balance;
     /** 登録日 */
     private Date entryDate;
     /** 登録者 */
@@ -57,17 +60,21 @@ public class AccountForm {
      * DTOの内容をコピーする
      *
      * @param dto MAccountDto
+     * @param balance TODO
      * @throws SystemException
      */
-    public void copyFrom(MAccountDto dto) throws SystemException {
+    public void copyFrom(MAccountDto dto, BigDecimal balance) throws SystemException {
         // 基本は全てコピー
         BeanUtils.copyProperties(dto, this);
+        // 残高
+        this.setBalance(balance);
         // 口座番号表示用を設定
         String aNForDisp = ProjectCommonUtil.getAccountNumberForDisplay(this.getAccountNumber());
         this.setAccountNumberForDisplay(aNForDisp);
         // 区分名は取得
         String accountKubunMei = KubunUtil.getKubunMei(AccountKubun.ACCOUNT_KUBUN_LIST, this.getAccountKubun());
         this.setAccountKubunMei(accountKubunMei);
+
     }
 
     /**
@@ -227,6 +234,20 @@ public class AccountForm {
      */
     public final void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    /**
+     * @return balance
+     */
+    public final BigDecimal getBalance() {
+        return balance;
+    }
+
+    /**
+     * @param balance セットする balance
+     */
+    public final void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
 }

@@ -10,7 +10,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
-	<h1>確認画面</h1>
+	<h1 id=header>確認画面</h1>
 	<form method="post">
 		<dl>
 			<dt>口座名</dt>

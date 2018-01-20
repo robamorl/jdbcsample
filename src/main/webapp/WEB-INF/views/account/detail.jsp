@@ -6,11 +6,12 @@
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>口座詳細画面</title>
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/common.css" />">
+<link rel="stylesheet" type="text/css"
+	href="<c:url value="/resources/css/common.css" />">
 </HEAD>
 <BODY>
 	<jsp:include page="../header/login_info.jsp" />
-	<h1>口座詳細画面</h1>
+	<h1 id=header>口座詳細画面</h1>
 	<dl>
 		<dt>口座名</dt>
 		<dd>
@@ -23,6 +24,10 @@
 		<dt>口座区分</dt>
 		<dd>
 			<c:out value="${account.accountKubunMei}" />
+		<dt>残高</dt>
+		<dd>
+			<fmt:formatNumber value="${account.balance}" maxFractionDigits="0"
+				type="CURRENCY" currencySymbol="\\" />
 		</dd>
 		<dt>登録日時</dt>
 		<dd>

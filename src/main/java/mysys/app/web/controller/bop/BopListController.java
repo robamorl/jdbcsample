@@ -7,9 +7,11 @@ import java.util.List;
 
 import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.MAccountDto;
+import mysys.app.biz.domain.TBalanceDto;
 import mysys.app.biz.domain.TBalanceOfPaymentsDto;
 import mysys.app.biz.service.MAccountService;
 import mysys.app.biz.service.TBalanceOfPaymentsService;
+import mysys.app.biz.service.TBalanceService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 import mysys.app.biz.service.exception.SystemException;
 import mysys.app.web.form.BalanceOfPaymentsForm;
@@ -27,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BopListController {
 
     @Autowired
-    private TBalanceOfPaymentsService tBalanceOfPaymentsService;
+    private TBalanceOfPaymentsService balanceOfPaymentsService;
     @Autowired
-    private MAccountService mAccountService;
+    private MAccountService accountService;
+    @Autowired
+    private TBalanceService balanceService;
 
     /**
      *
@@ -50,7 +54,7 @@ public class BopListController {
         // 最初にユーザに紐づく口座を取得
         List<MAccountDto> accountList;
         try {
-            accountList = mAccountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
+            accountList = accountService.execFindAllByUserId(LoginUserUtil.getLoginUserId());
         } catch (DataNotFoundException e) {
             // 口座自体が存在しなかったらこの時点で空のFormリストを返却して終了
             model.addAttribute("bops", formList);
@@ -64,7 +68,7 @@ public class BopListController {
 
         // 口座IDのリストを元に全ての収支を取得
         try {
-            bopList = tBalanceOfPaymentsService.execFindByAccountIdList(accountIds);
+            bopList = balanceOfPaymentsService.execFindByAccountIdList(accountIds);
         } catch (DataNotFoundException e) {
             bopList = new ArrayList<TBalanceOfPaymentsDto>();
         }
@@ -89,7 +93,7 @@ public class BopListController {
 
             // formへコピー
             BalanceOfPaymentsForm form = new BalanceOfPaymentsForm();
-            form.copyFrom(dto, accountName, accountNumber);
+            form.copyFrom(dto, accountName, accountNumber, null);
             formList.add(form);
         }
 
@@ -110,11 +114,12 @@ public class BopListController {
     @RequestMapping(value = "/list/{balanceOfPaymentsId}", method = GET)
     public String showAcctountDetail(@PathVariable Long balanceOfPaymentsId, Model model)
                                         throws DataNotFoundException,SystemException{
-        TBalanceOfPaymentsDto bop = tBalanceOfPaymentsService.execFind(balanceOfPaymentsId);
-        MAccountDto account = mAccountService.execFind(bop.getAccountId());
+        TBalanceOfPaymentsDto bop = balanceOfPaymentsService.execFind(balanceOfPaymentsId);
+        MAccountDto account = accountService.execFind(bop.getAccountId());
+        TBalanceDto balance = balanceService.execFindByAccountId(account.getAccountId());
         // Formへ詰替
         BalanceOfPaymentsForm form = new BalanceOfPaymentsForm();
-        form.copyFrom(bop, account.getAccountName(), account.getAccountNumber());
+        form.copyFrom(bop, account.getAccountName(), account.getAccountNumber(), balance.getBalance());
         model.addAttribute("bop", form);
         return "bop/detail";
     }
@@ -131,7 +136,7 @@ public class BopListController {
     @RequestMapping(value = "/list/{accountId}/delete", method = GET)
     public String execDelete(@PathVariable Long accountId, Model model)
                                         throws DataNotFoundException{
-        tBalanceOfPaymentsService.execLogicalDelete(accountId);
+        balanceOfPaymentsService.execLogicalDelete(accountId);
         ProjectCommonUtil.addDeleteDoneMessage(model);
         return "redirect:/account/";
     }

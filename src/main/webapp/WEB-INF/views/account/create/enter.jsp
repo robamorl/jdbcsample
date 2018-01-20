@@ -10,7 +10,7 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
-	<h1>口座登録画面</h1>
+	<h1 id=header>口座登録画面</h1>
 	<form:form modelAttribute="editAccount">
 		<dl>
 			<dt>口座名</dt>
@@ -24,7 +24,7 @@
 			</dd>
 			<dt>口座区分</dt>
 			<dd>
-				<form:select path="accountKubun" items="${accountKubunList}"
+				<form:select cssErrorClass="error-input" path="accountKubun" items="${accountKubunList}"
 					itemLabel="label" itemValue="value" />
 				<form:errors cssClass="error-message" path="accountKubun" />
 			</dd>

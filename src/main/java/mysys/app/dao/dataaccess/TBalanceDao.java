@@ -24,9 +24,9 @@ public interface TBalanceDao {
      * ユーザIDに紐づくTBalanceの検索
      *
      * @param accountId ユーザID
-     * @return List<TBalanceDto>
+     * @return TBalanceDto
      */
-    public List<TBalanceDto> findAllByAccountId(Long accountId);
+    public TBalanceDto findByAccountId(Long accountId);
 
     /**
     *

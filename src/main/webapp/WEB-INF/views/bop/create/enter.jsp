@@ -10,23 +10,23 @@
 </HEAD>
 <BODY>
 	<jsp:include page="../../header/login_info.jsp" />
-	<h1>収支登録画面</h1>
+	<h1 id=header>収支登録画面</h1>
 	<form:form modelAttribute="editBop">
 		<dl>
 			<dt>処理口座</dt>
 			<dd>
-				<form:select path="accountId" items="${transactionAccountList}"
-					itemLabel="label" itemValue="value" />
+				<form:select cssErrorClass="error-input" path="accountId" items="${transactionAccountList}"
+					itemLabel="label" itemValue="value"/>
 				<form:errors cssClass="error-message" path="accountId" />
 			<dt>収入/支出</dt>
 			<dd>
-				<form:select path="balanceOfPaymentsKubun" items="${bopKubunList}"
+				<form:select cssErrorClass="error-input" path="balanceOfPaymentsKubun" items="${bopKubunList}"
 					itemLabel="label" itemValue="value" />
 				<form:errors cssClass="error-message" path="balanceOfPaymentsKubun" />
 			</dd>
 			<dt>費目</dt>
 			<dd>
-				<form:select path="expensesKubun" items="${expensesKubunList}"
+				<form:select cssErrorClass="error-input" path="expensesKubun" items="${expensesKubunList}"
 					itemLabel="label" itemValue="value" />
 				<form:errors cssClass="error-message" path="expensesKubun" />
 			</dd>
@@ -35,7 +35,7 @@
 				<form:input cssErrorClass="error-input" path="amount" />
 				<form:errors cssClass="error-message" path="amount" />
 			</dd>
-			<dt>終始発生日</dt>
+			<dt>収支発生日</dt>
 			<dd>
 				<form:input cssErrorClass="error-input" path="transactionDate" />
 				<form:errors cssClass="error-message" path="transactionDate" />

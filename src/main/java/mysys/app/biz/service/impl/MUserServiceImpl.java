@@ -28,7 +28,11 @@ public class MUserServiceImpl implements MUserService {
      * {@inheritDoc}
      */
     public MUserDto execFindByUserCode(String userCode) throws DataNotFoundException {
-        return userDao.findByUserCode(userCode);
+        try {
+            return userDao.findByUserCode(userCode);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DataNotFoundException("ユーザが見つかりませんでした。");
+        }
     }
 
     /**

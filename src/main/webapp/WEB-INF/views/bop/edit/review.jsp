@@ -26,6 +26,7 @@
 			<dd>
 				<c:out value="${editBop.balanceOfPaymentsKubunMei}" />
 				<input type="hidden" value="${editBop.balanceOfPaymentsKubun}">
+				<input type="hidden" value="${editBop.beforeBalanceOfPaymentsKubun}">
 			</dd>
 			<dt>費目</dt>
 			<dd>
@@ -42,6 +43,7 @@
 				<fmt:formatNumber value="${editBop.amount}" maxFractionDigits="0"
 					type="CURRENCY" currencySymbol="\\" />
 				<input type="hidden" value="${editBop.amount}">
+				<input type="hidden" value="${editBop.beforeAmount}">
 			</dd>
 			<dt>終始発生日</dt>
 			<dd>

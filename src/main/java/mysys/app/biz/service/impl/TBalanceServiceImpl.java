@@ -3,6 +3,7 @@ package mysys.app.biz.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import mysys.app.biz.common.util.ProjectCommonUtil;
 import mysys.app.biz.domain.TBalanceDto;
 import mysys.app.biz.domain.TBalanceHistoryDto;
 import mysys.app.biz.service.TBalanceService;
@@ -82,7 +83,7 @@ public class TBalanceServiceImpl implements TBalanceService {
         }
         // 残高の算出
         BigDecimal balance = dto.getBalance();
-        balance = balance.add(amount.multiply(BigDecimal.valueOf(sign)));
+        balance = ProjectCommonUtil.calcBalance(balance, amount, sign);
 
         // 残高を設定し更新
         dto.setBalance(balance);

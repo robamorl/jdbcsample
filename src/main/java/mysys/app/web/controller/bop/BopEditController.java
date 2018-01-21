@@ -64,7 +64,7 @@ public class BopEditController {
      *@param sessionStatus {@link SessionStatus}
      * @return URI
      */
-    @RequestMapping(path = "/edt", method = GET)
+    @RequestMapping(path = "/edit", method = GET)
     public String redirectToEntryForm(SessionStatus sessionStatus) {
         sessionStatus.setComplete();
         return "redirect:enter";
@@ -82,7 +82,6 @@ public class BopEditController {
      */
     @RequestMapping(path = "/enter", method = GET)
     public String showEntryForm(@PathVariable Long balanceOfPaymentsId, Model model) throws DataNotFoundException, SystemException {
-        ProjectCommonUtil.addModelAttribute(model, "editBop", new BalanceOfPaymentsForm());
         // ----------------------------------------------------------------------
         // 基本情報のセット
         TBalanceOfPaymentsDto bop = bopService.execFind(balanceOfPaymentsId);
@@ -91,6 +90,7 @@ public class BopEditController {
         // Formへ詰替
         BalanceOfPaymentsForm form = new BalanceOfPaymentsForm();
         form.copyFrom(bop, account.getAccountName(), account.getAccountNumber(), balance.getBalance());
+        ProjectCommonUtil.addModelAttribute(model, "editBop", form);
         // 選択されたデータを取得
         // ユーザに紐づく口座を取得
         List<MAccountDto> accountList;
@@ -114,7 +114,7 @@ public class BopEditController {
         // 費目区分をセット
         model.addAttribute("expensesKubunList", ExpensesKubun.EXPENSES_KUBUN_LIST);
 
-        return "bop/edt/enter";
+        return "bop/edit/enter";
     }
 
     /**
@@ -130,7 +130,7 @@ public class BopEditController {
     @RequestMapping(path = "/enter", params = "_event_proceed", method = POST)
     public String verify(@Valid @ModelAttribute("editBop") BalanceOfPaymentsForm bopForm, Errors errors, Model model) throws SystemException {
         if (errors.hasErrors()) {
-            return "bop/edt/enter";
+            return "bop/edit/enter";
         }
 
         // ----------------------------------------------------------------------
@@ -162,15 +162,12 @@ public class BopEditController {
             throw new SystemException("想定外：口座IDに紐づく残高が見つからない。"
                                                        + " 口座ID:" + bopForm.getAccountId());
         }
+        // 残高に更新前金額を加減算する。
+        BigDecimal balance = ProjectCommonUtil.calcBalance(balanceDto.getBalance(), bopForm.getBeforeAmount(),
+                ProjectCommonUtil.getBalanceOfPaymentsSign(bopForm.getBeforeBalanceOfPaymentsKubun()) * -1);
         // 収支区分によって残高を計算
-        BigDecimal balance = BigDecimal.ZERO;
-        if (BalanceOfPaymentsKubun.BOP_KUBUN_EXPENSE.equals(bopForm.getBalanceOfPaymentsKubun())) {
-            // 支出の場合
-            balance = balanceDto.getBalance().subtract(bopForm.getAmount());
-        } else if (BalanceOfPaymentsKubun.BOP_KUBUN_INCOME.equals(bopForm.getBalanceOfPaymentsKubun())) {
-            // 収入の場合
-            balance = balanceDto.getBalance().add(bopForm.getAmount());
-        }
+        balance = ProjectCommonUtil.calcBalance(balance, bopForm.getAmount(),
+                ProjectCommonUtil.getBalanceOfPaymentsSign(bopForm.getBalanceOfPaymentsKubun()));
         bopForm.setBalance(balance);
 
         return "redirect:review";
@@ -195,7 +192,7 @@ public class BopEditController {
      */
     @RequestMapping(path = "/review", method = GET)
     public String showReview() {
-        return "bop/edt/review";
+        return "bop/edit/review";
     }
 
     /**
@@ -220,8 +217,8 @@ public class BopEditController {
     @RequestMapping(path = "/review", params = "_event_confirmed", method = POST)
     public String execUpdate(@ModelAttribute("editBop") BalanceOfPaymentsForm bopForm) throws DataNotFoundException {
         // 口座の更新
-        bopService.execInsert(bopForm.createDto());
-        return "redirect:edted";
+        bopService.execUpdate(bopForm.createDto());
+        return "redirect:edited";
     }
 
     /**
@@ -232,10 +229,10 @@ public class BopEditController {
      * @param model
      * @return URI
      */
-    @RequestMapping(path = "/edted", method = GET)
+    @RequestMapping(path = "/edited", method = GET)
     public String showEdited(SessionStatus sessionStatus, Model model) {
         sessionStatus.setComplete();
         ProjectCommonUtil.addInsertDoneMessage(model);
-        return "bop/edt/edited";
+        return "bop/edit/edited";
     }
 }

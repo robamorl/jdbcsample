@@ -37,6 +37,8 @@ public class BalanceOfPaymentsForm {
     /** 収支区分 */
     @NotNull(message="selected.none")
     private String balanceOfPaymentsKubun;
+    /** 更新前収支区分 */
+    private String beforeBalanceOfPaymentsKubun;
     /** 収支区分名 */
     private String balanceOfPaymentsKubunMei;
     /** 費目区分*/
@@ -48,6 +50,8 @@ public class BalanceOfPaymentsForm {
     @NotNull
     @Range(min=1)
     private BigDecimal amount;
+    /**  更新前金額 */
+    private BigDecimal beforeAmount;
     /** 処理日 */
     @NotNull
     @DateTimeFormat(pattern="yyyyMMdd")
@@ -76,6 +80,10 @@ public class BalanceOfPaymentsForm {
    public void copyFrom(TBalanceOfPaymentsDto dto, String accountName, String accountNumber, BigDecimal balance) throws SystemException {
        // 基本は全てコピー
        BeanUtils.copyProperties(dto, this);
+       // 更新前収支区分
+       this.setBeforeBalanceOfPaymentsKubun(dto.getBalanceOfPaymentsKubun());
+       // 更新前金額
+       this.setBeforeAmount(dto.getAmount());
        // 口座名
        this.setAccountName(accountName);
        // 口座番号
@@ -288,6 +296,34 @@ public class BalanceOfPaymentsForm {
      */
     public final void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    /**
+     * @return beforeAmount
+     */
+    public final BigDecimal getBeforeAmount() {
+        return beforeAmount;
+    }
+
+    /**
+     * @param beforeAmount セットする beforeAmount
+     */
+    public final void setBeforeAmount(BigDecimal beforeAmount) {
+        this.beforeAmount = beforeAmount;
+    }
+
+    /**
+     * @return beforeBalanceOfPaymentsKubun
+     */
+    public final String getBeforeBalanceOfPaymentsKubun() {
+        return beforeBalanceOfPaymentsKubun;
+    }
+
+    /**
+     * @param beforeBalanceOfPaymentsKubun セットする beforeBalanceOfPaymentsKubun
+     */
+    public final void setBeforeBalanceOfPaymentsKubun(String beforeBalanceOfPaymentsKubun) {
+        this.beforeBalanceOfPaymentsKubun = beforeBalanceOfPaymentsKubun;
     }
 
 }

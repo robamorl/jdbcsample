@@ -58,7 +58,7 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<tx:advice id="serviceTransactionAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="exec*" propagation="REQUIRED" isolation="SERIALIZABLE"
-				read-only="false" rollback-for="java.lang.Exception" timeout="10" />
+				read-only="false" rollback-for="java.lang.Exception" timeout="60" />
 		</tx:attributes>
 	</tx:advice>
 	<tx:advice id="daoTransactionAdvice" transaction-manager="transactionManager">

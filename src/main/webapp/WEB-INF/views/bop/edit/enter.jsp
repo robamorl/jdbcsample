@@ -23,6 +23,7 @@
 				<form:select cssErrorClass="error-input" path="balanceOfPaymentsKubun" items="${bopKubunList}"
 					itemLabel="label" itemValue="value" />
 				<form:errors cssClass="error-message" path="balanceOfPaymentsKubun" />
+				<input type="hidden" value="${beforeBalanceOfPaymentsKubun}">
 			</dd>
 			<dt>費目</dt>
 			<dd>
@@ -34,6 +35,7 @@
 			<dd>
 				<form:input cssErrorClass="error-input" path="amount" />
 				<form:errors cssClass="error-message" path="amount" />
+				<input type="hidden" value="${beforeAmount}">
 			</dd>
 			<dt>収支発生日</dt>
 			<dd>

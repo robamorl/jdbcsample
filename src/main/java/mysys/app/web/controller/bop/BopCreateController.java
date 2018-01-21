@@ -151,14 +151,8 @@ public class BopCreateController {
                                                        + " 口座ID:" + bopForm.getAccountId());
         }
         // 収支区分によって残高を計算
-        BigDecimal balance = BigDecimal.ZERO;
-        if (BalanceOfPaymentsKubun.BOP_KUBUN_EXPENSE.equals(bopForm.getBalanceOfPaymentsKubun())) {
-            // 支出の場合
-            balance = balanceDto.getBalance().subtract(bopForm.getAmount());
-        } else if (BalanceOfPaymentsKubun.BOP_KUBUN_INCOME.equals(bopForm.getBalanceOfPaymentsKubun())) {
-            // 収入の場合
-            balance = balanceDto.getBalance().add(bopForm.getAmount());
-        }
+        BigDecimal balance = ProjectCommonUtil.calcBalance(balanceDto.getBalance(), bopForm.getAmount(),
+                ProjectCommonUtil.getBalanceOfPaymentsSign(bopForm.getBalanceOfPaymentsKubun()));
         bopForm.setBalance(balance);
 
         return "redirect:review";

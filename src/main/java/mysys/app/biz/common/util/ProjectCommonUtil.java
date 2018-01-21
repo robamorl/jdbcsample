@@ -1,5 +1,7 @@
 package mysys.app.biz.common.util;
 
+import java.math.BigDecimal;
+
 import javax.jws.WebParam.Mode;
 
 import mysys.app.biz.common.kubun.BalanceOfPaymentsKubun;
@@ -158,5 +160,18 @@ public class ProjectCommonUtil {
            return Long.valueOf(-1L);
        }
        return Long.valueOf(1L);
+   }
+
+   /**
+    *
+    * 引数の残高、金額、サインから残高を計算します。
+    *
+    * @param balance 残高
+    * @param amount 金額
+    * @param sign サイン
+    * @return 残高
+    */
+   public static final BigDecimal calcBalance(BigDecimal balance, BigDecimal amount, Long sign) {
+       return balance.add(amount.multiply(BigDecimal.valueOf(sign)));
    }
 }

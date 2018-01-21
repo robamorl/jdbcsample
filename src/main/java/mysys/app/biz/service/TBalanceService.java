@@ -51,15 +51,17 @@ public interface TBalanceService {
     /**
      *
      * 引数の口座IDに紐づく残高を引数の金額によって更新します。
-     * 残高の金額はisIncomeがtrueの場合加算、falseの場合減算にて求めます。
+     * 残高の金額は
+     *  現在残高 + (金額 * サイン値(1or-1)
+     * にて求めます。
      *
      * @param accoundId 口座ID
      * @param amount 金額
-     * @param isIncome true:収入 / false:支出
+     * @param sign 金額に乗算するサイン
      * @return 更新した残高Dto
      * @throws DataNotFoundException
      */
-    public TBalanceDto execUpdateByAmount(Long accoundId, BigDecimal amount, boolean isIncome) throws DataNotFoundException;
+    public TBalanceDto execUpdateByAmount(Long accoundId, BigDecimal amount, Long sign) throws DataNotFoundException;
 
     /**
     *

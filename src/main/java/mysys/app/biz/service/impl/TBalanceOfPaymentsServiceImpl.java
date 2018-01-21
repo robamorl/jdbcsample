@@ -2,7 +2,6 @@ package mysys.app.biz.service.impl;
 
 import java.util.List;
 
-import mysys.app.biz.common.kubun.BalanceOfPaymentsKubun;
 import mysys.app.biz.domain.TBalanceOfPaymentsDto;
 import mysys.app.biz.service.TBalanceOfPaymentsService;
 import mysys.app.biz.service.TBalanceService;
@@ -67,13 +66,7 @@ public class TBalanceOfPaymentsServiceImpl implements TBalanceOfPaymentsService 
     public TBalanceOfPaymentsDto execInsert(TBalanceOfPaymentsDto bop) throws DataNotFoundException {
         // 収支の登録
         bopDao.insert(bop);
-
-        // 残高の更新
-        boolean isIncome = false;
-        if (BalanceOfPaymentsKubun.BOP_KUBUN_INCOME.equals(bop.getBalanceOfPaymentsKubun())) {
-            isIncome = true;
-        }
-        balanceService.execUpdateByAmount(bop.getAccountId(), bop.getAmount(), isIncome);
+        balanceService.execUpdateByAmount(bop.getAccountId(), bop.getAmount(), bop.getBalanceOfPaymentsSign());
         return bopDao.find(bop.getBalanceOfPaymentsId());
     }
 
@@ -81,12 +74,12 @@ public class TBalanceOfPaymentsServiceImpl implements TBalanceOfPaymentsService 
      * {@inheritDoc}
      */
     public TBalanceOfPaymentsDto execUpdate(TBalanceOfPaymentsDto bop) throws DataNotFoundException {
-        try {
-            bopDao.update(bop);
-            return bopDao.find(bop.getBalanceOfPaymentsId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new DataNotFoundException("収支が見つかりませんでした。");
-        }
+        // 旧レコードの削除
+        this.execLogicalDelete(bop.getBalanceOfPaymentsId());
+        // 新しいレコードの登録
+        this.execInsert(bop);
+
+        return bop;
     }
 
     /**
@@ -108,16 +101,21 @@ public class TBalanceOfPaymentsServiceImpl implements TBalanceOfPaymentsService 
      * {@inheritDoc}
      */
     public TBalanceOfPaymentsDto execLogicalDelete(Long bopId) throws DataNotFoundException {
+        // 収支を削除
         try {
             bopDao.logicalDelete(bopId);
         } catch (EmptyResultDataAccessException e) {
             throw new DataNotFoundException("収支が見つかりませんでした。");
         }
+        TBalanceOfPaymentsDto bop = bopDao.findWithContainsDeleteRec(bopId);
 
-        // 紐づく残高の削除
-//        balanceDao.execLogicalDelete(bopId);
+        // 紐づく残高の更新
+        // 収支サインは反転させる
+        // 反転させるために-1を乗算
+        Long sign = bop.getBalanceOfPaymentsSign() * -1;
+        balanceService.execUpdateByAmount(bop.getAccountId(), bop.getAmount(), sign);
 
-        return bopDao.findWithContainsDeleteRec(bopId);
+        return bop;
     }
 
 }

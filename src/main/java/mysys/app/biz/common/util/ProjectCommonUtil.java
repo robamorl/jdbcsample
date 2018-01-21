@@ -2,6 +2,7 @@ package mysys.app.biz.common.util;
 
 import javax.jws.WebParam.Mode;
 
+import mysys.app.biz.common.kubun.BalanceOfPaymentsKubun;
 import mysys.app.biz.service.exception.SystemException;
 
 import org.springframework.ui.Model;
@@ -143,5 +144,19 @@ public class ProjectCommonUtil {
     */
    public static final void addGeneralMessage(Model model, String message) {
        addMessage(model, message);
+   }
+
+   /**
+    *
+    * 引数の収支区分より収支サインを取得する。
+    *
+    * @param balanceOfPaymentsKubun 収支区分
+    * @return 収支サイン
+    */
+   public static final Long getBalanceOfPaymentsSign(String balanceOfPaymentsKubun) {
+       if (BalanceOfPaymentsKubun.BOP_KUBUN_EXPENSE.equals(balanceOfPaymentsKubun)) {
+           return Long.valueOf(-1L);
+       }
+       return Long.valueOf(1L);
    }
 }

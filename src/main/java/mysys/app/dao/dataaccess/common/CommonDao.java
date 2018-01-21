@@ -138,6 +138,25 @@ public class CommonDao {
     }
 
     /**
+    *
+    * 複合PK用の更新用SQLを発行します。
+    *
+    * @param tableName テーブル名
+    * @param columns カラムリスト
+    * @param pk 更新条件のPK
+    * @return クエリー
+    */
+   protected String getUpdateQuery(String tableName, List<SqlColumn> columns, Object... pk) {
+       StringBuffer query = new StringBuffer();
+       SqlCondition[] conditions = this.getPkConditionsByEqual(new SqlColumn[]{columns.get(0), columns.get(1)}, pk);
+       query.append(MessageFormat.format(
+               UPDATE_QUERY,
+               new Object[] { tableName, this.convertColumnListToQuery(columns, TYPE_UPDATE),
+                       this.getCondition(conditions) }));
+       return query.toString();
+   }
+
+    /**
      *
      * 挿入用SQLを発行します。
      *
@@ -215,6 +234,22 @@ public class CommonDao {
     protected SqlCondition getPkConditionByEqual(SqlColumn pkColumn,  Object pk) {
         return new SqlCondition(pkColumn.getColumnName(), SqlCondition.EQ, pk.toString());
     }
+
+    /**
+    *
+    * 複合PKに対するイコール条件のSqlConditonを作成します。
+    *
+    * @param pkColumn PKカラム
+    * @param pk PK
+    * @return SQLConditon
+    */
+   protected SqlCondition[] getPkConditionsByEqual(SqlColumn[] pkColumn,  Object[] pk) {
+       SqlCondition[] conditions = new SqlCondition[pkColumn.length];
+       for (int i = 0; i < pkColumn.length; i++) {
+           conditions[i] = new SqlCondition(pkColumn[i].getColumnName(), SqlCondition.EQ, pk[i].toString());
+       }
+       return conditions;
+   }
 
     /**
      *

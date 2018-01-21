@@ -36,6 +36,7 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
     private SqlColumn BALANCE_OF_PAYMENTS_ID = new SqlColumn("BALANCE_OF_PAYMENTS_ID", "balanceOfPaymentsId");
     private SqlColumn ACCOUNT_ID = new SqlColumn("ACCOUNT_ID", "accountId");
     private SqlColumn BALANCE_OF_PAYMENTS_KUBUN = new SqlColumn("BALANCE_OF_PAYMENTS_KUBUN", "balanceOfPaymentsKubun");
+    private SqlColumn BALANCE_OF_PAYMENTS_SIGN = new SqlColumn("BALANCE_OF_PAYMENTS_SIGN", "balanceOfPaymentsSign");
     private SqlColumn EXPENSES_KUBUN = new SqlColumn("EXPENSES_KUBUN", "expensesKubun");
     private SqlColumn AMOUNT = new SqlColumn("AMOUNT", "amount");
     private SqlColumn TRANSACTION_DATE = new SqlColumn("TRANSACTION_DATE", "transactionDate");
@@ -46,6 +47,7 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
             BALANCE_OF_PAYMENTS_ID,
             ACCOUNT_ID,
             BALANCE_OF_PAYMENTS_KUBUN,
+            BALANCE_OF_PAYMENTS_SIGN,
             EXPENSES_KUBUN,
             AMOUNT,
             TRANSACTION_DATE,
@@ -59,9 +61,9 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
     /**
      * {@inheritDoc}
      */
-    public TBalanceOfPaymentsDto find(Long earningsAndExpensesId) throws EmptyResultDataAccessException,
+    public TBalanceOfPaymentsDto find(Long bopId) throws EmptyResultDataAccessException,
             IncorrectResultSizeDataAccessException {
-        SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, earningsAndExpensesId);
+        SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, bopId);
         try {
             return jdbcTemplate
                     .queryForObject(super.getSelectQueryByCondition(TABLE_NAME, condition), new TBalanceOfPaymentsMapper());
@@ -89,9 +91,9 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
     /**
      * {@inheritDoc}
      */
-    public TBalanceOfPaymentsDto findWithContainsDeleteRec(Long earningsAndExpensesId) throws EmptyResultDataAccessException,
+    public TBalanceOfPaymentsDto findWithContainsDeleteRec(Long bopId) throws EmptyResultDataAccessException,
             IncorrectResultSizeDataAccessException {
-        SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, earningsAndExpensesId);
+        SqlCondition condition = new SqlCondition(COLUMNS.get(0).getColumnName(), SqlCondition.EQ, bopId);
         try {
             return jdbcTemplate
                     .queryForObject(super.getSelectQueryByConditionWithContainsDeletedRecord(TABLE_NAME, condition),
@@ -131,22 +133,22 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
     /**
      * {@inheritDoc}
      */
-    public void insert(TBalanceOfPaymentsDto earningsAndExpenses) {
-        earningsAndExpenses.setBalanceOfPaymentsId(this.getPkByNextVal());
-        earningsAndExpenses.setEntryData();
+    public void insert(TBalanceOfPaymentsDto bop) {
+        bop.setBalanceOfPaymentsId(this.getPkByNextVal());
+        bop.setEntryData();
         namedParameterJdbcTemplate.update(super.getInsertQuery(TABLE_NAME, COLUMNS),
-                new BeanPropertySqlParameterSource(earningsAndExpenses));
+                new BeanPropertySqlParameterSource(bop));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void update(TBalanceOfPaymentsDto earningsAndExpenses) throws EmptyResultDataAccessException {
-        super.copyLogData(this.find(earningsAndExpenses.getAccountId()), earningsAndExpenses);
-        earningsAndExpenses.setUpdateData();
+    public void update(TBalanceOfPaymentsDto bop) throws EmptyResultDataAccessException {
+        super.copyLogData(this.find(bop.getBalanceOfPaymentsId()), bop);
+        bop.setUpdateData();
         try {
-            namedParameterJdbcTemplate.update(super.getUpdateQuery(TABLE_NAME, COLUMNS, earningsAndExpenses.getAccountId()),
-                    new BeanPropertySqlParameterSource(earningsAndExpenses));
+            namedParameterJdbcTemplate.update(super.getUpdateQuery(TABLE_NAME, COLUMNS, bop.getBalanceOfPaymentsId()),
+                    new BeanPropertySqlParameterSource(bop));
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
         }
@@ -155,9 +157,9 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
     /**
      * {@inheritDoc}
      */
-    public void delete(Long earningsAndExpensesId) throws EmptyResultDataAccessException {
+    public void delete(Long bopId) throws EmptyResultDataAccessException {
         try {
-            namedParameterJdbcTemplate.update(super.getDeleteQuery(TABLE_NAME, COLUMNS, earningsAndExpensesId),
+            namedParameterJdbcTemplate.update(super.getDeleteQuery(TABLE_NAME, COLUMNS, bopId),
                     new BeanPropertySqlParameterSource(new TBalanceOfPaymentsDto()));
         } catch (EmptyResultDataAccessException e1) {
             throw e1;
@@ -167,10 +169,10 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
     /**
      * {@inheritDoc}
      */
-    public void logicalDelete(Long earningsAndExpensesId) throws EmptyResultDataAccessException {
-        TBalanceOfPaymentsDto earningsAndExpenses = this.find(earningsAndExpensesId);
-        earningsAndExpenses.setDeleteFlg(Boolean.TRUE);
-        this.update(earningsAndExpenses);
+    public void logicalDelete(Long bopId) throws EmptyResultDataAccessException {
+        TBalanceOfPaymentsDto bop = this.find(bopId);
+        bop.setDeleteFlg(Boolean.TRUE);
+        this.update(bop);
     }
 
     /**
@@ -182,19 +184,20 @@ public class TBalanceOfPaymentsDaoImpl extends CommonDao implements TBalanceOfPa
 
     class TBalanceOfPaymentsMapper implements RowMapper<TBalanceOfPaymentsDto> {
         public TBalanceOfPaymentsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-            TBalanceOfPaymentsDto earningsAndExpenses = new TBalanceOfPaymentsDto();
-            earningsAndExpenses.setBalanceOfPaymentsId(rs.getLong(BALANCE_OF_PAYMENTS_ID.getColumnName()));
-            earningsAndExpenses.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
-            earningsAndExpenses.setBalanceOfPaymentsKubun(rs.getString(BALANCE_OF_PAYMENTS_KUBUN.getColumnName()));
-            earningsAndExpenses.setExpensesKubun(rs.getString(EXPENSES_KUBUN.getColumnName()));
-            earningsAndExpenses.setAmount(rs.getBigDecimal(AMOUNT.getColumnName()));
-            earningsAndExpenses.setTransactionDate(rs.getDate(TRANSACTION_DATE.getColumnName()));
-            earningsAndExpenses.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));
-            earningsAndExpenses.setEntryUser(rs.getString(CommonDao.ENTRY_USER.getColumnName()));
-            earningsAndExpenses.setUpdateDate(rs.getTimestamp(CommonDao.UPDATE_DATE.getColumnName()));
-            earningsAndExpenses.setUpdateUser(rs.getString(CommonDao.UPDATE_USER.getColumnName()));
-            earningsAndExpenses.setDeleteFlg(rs.getBoolean(CommonDao.DELETE_FLG.getColumnName()));
-            return earningsAndExpenses;
+            TBalanceOfPaymentsDto bop = new TBalanceOfPaymentsDto();
+            bop.setBalanceOfPaymentsId(rs.getLong(BALANCE_OF_PAYMENTS_ID.getColumnName()));
+            bop.setAccountId(rs.getLong(ACCOUNT_ID.getColumnName()));
+            bop.setBalanceOfPaymentsKubun(rs.getString(BALANCE_OF_PAYMENTS_KUBUN.getColumnName()));
+            bop.setBalanceOfPaymentsSign(rs.getLong(BALANCE_OF_PAYMENTS_SIGN.getColumnName()));
+            bop.setExpensesKubun(rs.getString(EXPENSES_KUBUN.getColumnName()));
+            bop.setAmount(rs.getBigDecimal(AMOUNT.getColumnName()));
+            bop.setTransactionDate(rs.getDate(TRANSACTION_DATE.getColumnName()));
+            bop.setEntryDate(rs.getTimestamp(CommonDao.ENTRY_DATE.getColumnName()));
+            bop.setEntryUser(rs.getString(CommonDao.ENTRY_USER.getColumnName()));
+            bop.setUpdateDate(rs.getTimestamp(CommonDao.UPDATE_DATE.getColumnName()));
+            bop.setUpdateUser(rs.getString(CommonDao.UPDATE_USER.getColumnName()));
+            bop.setDeleteFlg(rs.getBoolean(CommonDao.DELETE_FLG.getColumnName()));
+            return bop;
         }
     }
 

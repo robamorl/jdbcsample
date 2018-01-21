@@ -3,9 +3,11 @@ package mysys.app.biz.service.impl;
 import java.util.List;
 
 import mysys.app.biz.domain.MUserDto;
+import mysys.app.biz.domain.MUserRoleDto;
 import mysys.app.biz.service.MUserService;
 import mysys.app.biz.service.exception.DataNotFoundException;
 import mysys.app.dao.dataaccess.MUserDao;
+import mysys.app.dao.dataaccess.MUserRoleDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,6 +18,8 @@ public class MUserServiceImpl implements MUserService {
 
     @Autowired
     MUserDao userDao;
+    @Autowired
+    MUserRoleDao userRoleDao;
 
     /**
      * {@inheritDoc}
@@ -51,6 +55,15 @@ public class MUserServiceImpl implements MUserService {
      */
     public MUserDto execInsert(MUserDto user) {
         userDao.insert(user);
+        // ロールの登録
+        MUserRoleDto userRole = new MUserRoleDto();
+        // ユーザID
+        userRole.setUserId(user.getUserId());
+        // ロールは一般固定
+        userRole.setRoleId(MUserRoleDao.ROLE_USER);
+        userRole.setDefaultFlg(Boolean.TRUE);
+        // 登録
+        userRoleDao.insert(userRole);
         return userDao.find(user.getUserId());
     }
 

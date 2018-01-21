@@ -55,7 +55,7 @@
 	</dl>
 	<c:url value="/bop/list" var="url" />
 	<button onclick="location.href='${url}'">一覧</button>
-	<c:url value="/user/list/${bop.balanceOfPaymentsId}/delete" var="url" />
+	<c:url value="/bop/list/${bop.balanceOfPaymentsId}/delete" var="url" />
 	<button
 		onclick="if (confirm('この収支を削除します。よろしいですか？')) {location.href='${url}'}">削除</button>
 </BODY>

@@ -91,9 +91,10 @@ public class BalanceOfPaymentsForm {
 
    public TBalanceOfPaymentsDto createDto() {
        TBalanceOfPaymentsDto dto = new TBalanceOfPaymentsDto();
-
        // 基本は全てコピー
        BeanUtils.copyProperties(this, dto);
+       // 収支サインを設定
+        dto.setBalanceOfPaymentsSign(ProjectCommonUtil.getBalanceOfPaymentsSign(dto.getBalanceOfPaymentsKubun()));
 
        return dto;
    }

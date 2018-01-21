@@ -128,16 +128,16 @@ public class BopListController {
      *
      * 削除処理
      *
-     * @param accountId 口座ID
+     * @param balanceOfPaymentsId 収支ID
      * @param model {@link Model}
      * @return URI
      * @throws DataNotFoundException
      */
-    @RequestMapping(value = "/list/{accountId}/delete", method = GET)
-    public String execDelete(@PathVariable Long accountId, Model model)
+    @RequestMapping(value = "/list/{balanceOfPaymentsId}/delete", method = GET)
+    public String execDelete(@PathVariable Long balanceOfPaymentsId, Model model)
                                         throws DataNotFoundException{
-        balanceOfPaymentsService.execLogicalDelete(accountId);
+        balanceOfPaymentsService.execLogicalDelete(balanceOfPaymentsId);
         ProjectCommonUtil.addDeleteDoneMessage(model);
-        return "redirect:/account/";
+        return "redirect:/bop/";
     }
 }

@@ -73,7 +73,7 @@ public class TBalanceServiceImpl implements TBalanceService {
     /**
      * {@inheritDoc}
      */
-    public TBalanceDto execUpdateByAmount(Long accountId, BigDecimal amount, boolean isIncome) throws DataNotFoundException {
+    public TBalanceDto execUpdateByAmount(Long accountId, BigDecimal amount, Long sign) throws DataNotFoundException {
         TBalanceDto dto;
         try {
             dto = balanceDao.find(accountId);
@@ -82,13 +82,7 @@ public class TBalanceServiceImpl implements TBalanceService {
         }
         // 残高の算出
         BigDecimal balance = dto.getBalance();
-        if (isIncome) {
-            // 収入の場合
-            balance = balance.add(amount);
-        } else {
-            // 支出の場合
-            balance = balance.subtract(amount);
-        }
+        balance = balance.add(amount.multiply(BigDecimal.valueOf(sign)));
 
         // 残高を設定し更新
         dto.setBalance(balance);

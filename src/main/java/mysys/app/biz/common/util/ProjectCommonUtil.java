@@ -114,7 +114,7 @@ public class ProjectCommonUtil {
      * @param model {@link Model}
      */
     public static final void addInsertDoneMessage(Model model) {
-        addMessage(model, "正常に登録が完了しました。");
+        addMessage(model, "\u6B63\u5E38\u306B\u767B\u9332\u304C\u5B8C\u4E86\u3057\u307E\u3057\u305F\u3002");
     }
 
     /**
@@ -124,7 +124,7 @@ public class ProjectCommonUtil {
      * @param model {@link Model}
      */
     public static final void addUpdateDoneMessage(Model model) {
-        addMessage(model, "正常に更新が完了しました。");
+        addMessage(model, "\u6B63\u5E38\u306B\u66F4\u65B0\u304C\u5B8C\u4E86\u3057\u307E\u3057\u305F\u3002");
     }
 
     /**
@@ -134,7 +134,7 @@ public class ProjectCommonUtil {
      * @param model {@link Model}
      */
     public static final void addDeleteDoneMessage(Model model) {
-        addMessage(model, "正常に削除が完了しました。");
+        addMessage(model, "\u6B63\u5E38\u306B\u524A\u9664\u304C\u5B8C\u4E86\u3057\u307E\u3057\u305F\u3002");
     }
 
     /**
